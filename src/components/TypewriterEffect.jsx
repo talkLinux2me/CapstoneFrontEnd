@@ -1,4 +1,4 @@
-// TypewriterEffect.jsx
+
 import React, { useEffect, useState } from 'react';
 
 const messages = [
@@ -32,9 +32,9 @@ const TypewriterEffect = () => {
         setTimeout(() => {
           setMessageIndex((prev) => (prev + 1) % messages.length);
           setDisplayedText("");
-        }, 2000); // Pause before moving to the next message
+        }, 2000); 
       }
-    }, 50); // Adjust typing speed here
+    }, 50); 
 
     return () => clearInterval(interval);
   }, [messageIndex]);
