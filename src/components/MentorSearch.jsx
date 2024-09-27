@@ -16,7 +16,7 @@ const MentorSearch = () => {
   useEffect(() => {
     const fetchMentors = async () => {
       try {
-        const response = await fetch('http://localhost:8081/api/mentors');
+        const response = await fetch('http://localhost:8081/user/mentors');
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setMentors(data);
@@ -74,6 +74,9 @@ const MentorSearch = () => {
           {/* Add expertise options dynamically */}
           <option value="Web Development">Web Development</option>
           <option value="Data Science">Data Science</option>
+          <option value="Java">Java</option>
+          <option value="Python">Python</option>
+          <option value="JavaScript">JavaScript</option>
           <option value="Graphic Design">Graphic Design</option>
         </select>
       </div>

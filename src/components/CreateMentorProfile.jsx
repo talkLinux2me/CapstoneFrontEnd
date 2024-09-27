@@ -115,16 +115,7 @@ const CreateMentorProfile = () => {
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">{isEditing ? "Edit" : "Create"} Mentor Profile</h1>
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
-        <div className="mb-4">
-          <label htmlFor="profilePic" className="block text-gray-700">Profile Picture</label>
-          <input
-            type="file"
-            id="profilePic"
-            name="profilePic"
-            onChange={handleFileChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
+        
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700">Full Name</label>
           <input
@@ -146,6 +137,16 @@ const CreateMentorProfile = () => {
             value={mentorData.email}
             onChange={handleChange}
             required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="profilePic" className="block text-gray-700">Profile Picture (optional) </label>
+          <input
+            type="file"
+            id="profilePic"
+            name="profilePic"
+            onChange={handleFileChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />
         </div>

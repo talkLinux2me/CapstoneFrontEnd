@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Spinner from './Spinner';
 
-const MentorProfile = ({ registeredUsers = [] }) => { // Default to empty array
+const MentorProfile = ({ registeredUsers = [] }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [mentorData, setMentorData] = useState(null);
@@ -30,12 +30,11 @@ const MentorProfile = ({ registeredUsers = [] }) => { // Default to empty array
   }, [id]);
 
   useEffect(() => {
-    // Filter registered users based on the role selected
     if (registeredUsers.length > 0) {
       const mentees = registeredUsers.filter(user => user.role === 'mentee');
       setMenteeData(mentees);
     }
-  }, [registeredUsers]); // Only run this when registeredUsers changes
+  }, [registeredUsers]);
 
   const handleBack = () => {
     navigate(-1);
@@ -63,7 +62,7 @@ const MentorProfile = ({ registeredUsers = [] }) => { // Default to empty array
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">{mentorData.name}'s Profile</h1>
       <img src={mentorData.profilePic} alt={`${mentorData.name}'s Profile`} className="rounded-full w-32 h-32 mb-4" />
-      
+
       <h2 className="text-2xl font-semibold">Details</h2>
       <p><strong>Email:</strong> {mentorData.email}</p>
       <p><strong>Location:</strong> {mentorData.location}</p>
@@ -119,6 +118,12 @@ const MentorProfile = ({ registeredUsers = [] }) => { // Default to empty array
           onClick={() => window.location.href = `mailto:${mentorData.email}`}
         >
           Contact Mentor
+        </button>
+        <button 
+          className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+          onClick={() => navigate(`/mentors/${id}/edit`)} // Navigate to edit page
+        >
+          Edit Profile
         </button>
         <button 
           className="bg-gray-500 text-white px-4 py-2 rounded"

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AppRoutes from './components/Routes';
 
+
 const App = () => {
   const [registeredUsers, setRegisteredUsers] = useState([]);
 
@@ -9,13 +10,12 @@ const App = () => {
   };
 
   return (
-    <div>
+  
       <AppRoutes 
         registeredUsers={registeredUsers} 
         onRegister={handleRegister} 
       />
-
-    </div>
+  
   );
 };
 

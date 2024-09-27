@@ -15,30 +15,52 @@ function Login() {
     } else {
       setError('');
       try {
-        // Simulated API call
-        const response = await fakeApiLogin(email, password); // Replace with actual API call
-        if (response.success) {
-          if (rememberMe) {
-            localStorage.setItem('userEmail', email); // Store email in local storage if "Remember Me" is checked
-          }
-          navigate('/mentor-search'); // Redirect on success
-        } else {
-          setError('Login failed. Please check your credentials.');
-        }
-      } catch (err) {
-        setError('An error occurred. Please try again.');
-      }
-    }
+        const response = await fetch('http://localhost:8081/user/login', { 
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+      
+        });
+  const data = await response.ok
+if (data){
+  alert("Login Successful")
+
+  // Redirect based on the role
+  if (data.role === 'mentor') {
+    navigate(`/creatementorprofile`);
+  } else if (data.role === 'mentee') {
+    navigate(`/creatementeeprofile`);   
+}
+// else alert("Incorrect Email or Password");
+  
+        // setTimeout(() => {
+        //   // Redirect to the appropriate profile page based on the role
+        //   if (formData.role === 'mentee') {
+        //     navigate('/creatementeeprofile'); // Redirect to mentee profile
+        //   } else {
+        //     navigate('/creatementorprofile'); // Redirect to mentor profile
+        //   }
+        // }, 2000);
+    
+ }} catch (err) {
+        setError(err.message, "something is wrong");
+      } 
+    };
   };
 
-  // Simulated login function (for demonstration)
-  const fakeApiLogin = (email, password) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ success: email === 'test@example.com' && password === 'password123' });
-      }, 1000);
-    });
-  };
+  
+  // const = ('http://localhost:8081/user/login') (email, password) => {
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => {
+  //       resolve({ success: email === 'test@example.com' && password === 'password123' });
+  //     }, 1000);
+  //   });
+  // };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">

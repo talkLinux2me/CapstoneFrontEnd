@@ -42,15 +42,16 @@ const Registration = () => {
       setError('Password must be at least 6 characters.');
       return;
     }
-
+    console.log(JSON.stringify(formData));
     // Make the API call to register the user
     try {
-      const response = await fetch('/user/register', { 
+      const response = await fetch('http://localhost:8081/user/register', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+    
       });
 
       if (!response.ok) {
@@ -68,8 +69,8 @@ const Registration = () => {
         }
       }, 2000);
     } catch (err) {
-      setError(err.message);
-    }
+      setError(err.message, "something is wrong");
+    } 
   };
 
   return (

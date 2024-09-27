@@ -34,7 +34,7 @@ const TypewriterEffect = () => {
           setDisplayedText("");
         }, 2000); // Pause before moving to the next message
       }
-    }, 100); // Adjust typing speed here
+    }, 50); // Adjust typing speed here
 
     return () => clearInterval(interval);
   }, [messageIndex]);

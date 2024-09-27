@@ -11,7 +11,7 @@ const MenteeProfile = () => {
   useEffect(() => {
     const fetchMenteeData = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/api/mentees/${id}`);
+        const response = await fetch(`http://localhost:8081/user/mentee/:id}`);
         if (!response.ok) throw new Error('Mentee profile not found');
         const data = await response.json();
         setMenteeData(data);
@@ -26,11 +26,11 @@ const MenteeProfile = () => {
   }, [id]);
 
   const handleBack = () => {
-    window.history.back(); // Updated to use the window.history API
+    window.history.back(); 
   };
 
   if (loading) {
-    return <Spinner />; // Show the spinner while loading
+    return <Spinner />; 
   }
 
   if (error) {
@@ -62,21 +62,27 @@ const MenteeProfile = () => {
 
       <h2 className="text-2xl font-semibold mt-4">Personal Statement</h2>
       <p>{menteeData.personalStatement}</p>
-
       <div className="mt-6">
-        <button 
-          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-          onClick={() => window.location.href = `mailto:${menteeData.email}`}
-        >
-          Contact Mentee
-        </button>
-        <button 
-          className="bg-gray-500 text-white px-4 py-2 rounded"
-          onClick={handleBack}
-        >
-          Back
-        </button>
-      </div>
+  <button 
+    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+    onClick={() => window.location.href = `mailto:${menteeData.email}`}
+  >
+    Contact Mentee
+  </button>
+  <button 
+    className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+    onClick={handleBack}
+  >
+    Back
+  </button>
+  <button 
+    className="bg-yellow-500 text-white px-4 py-2 rounded"
+    onClick={() => navigate(`/editmenteeprofile`)}
+  >
+    Edit Profile
+  </button>
+</div>
+
     </div>
   );
 };

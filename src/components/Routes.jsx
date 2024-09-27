@@ -12,6 +12,9 @@ import CreateMenteeProfile from './CreateMenteeProfile'; //Creating Mentee Profi
 import CreateMentorProfile from './CreateMentorProfile';
 import InspirationalMessages from './InspirationalMessages';
 import TypewriterEffect from './TypewriterEffect';
+import MatchingComponent from './MatchingComponent';
+import EditMenteeProfile from './EditMenteeProfile';
+import EditMentorProfile from './EditMentorProfile';
 
 const AppRoutes = () => {
   return (
@@ -30,6 +33,9 @@ const AppRoutes = () => {
         <Route path="/creatementorprofile" element={<CreateMentorProfile/>} />
         <Route path="/inspirationalmessages" element={<InspirationalMessages/>} />
         <Route path="/typewritereffect" element={<TypewriterEffect/>} />
+        <Route path="/matchingcomponent" element={<MatchingComponent/>} />
+        <Route path="/editmenteeprofile" element={<EditMenteeProfile/>} />
+        <Route path="/editmentorprofile" element={<EditMentorProfile/>} />
       </Routes>
     
     </>

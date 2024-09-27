@@ -86,7 +86,7 @@ const CreateMenteeProfile = () => {
 
     try {
       const method = isEditing ? 'PUT' : 'POST';
-      const response = await fetch(`http://localhost:8081/api/mentees${isEditing ? `/${id}` : ''}`, {
+      const response = await fetch(`http://localhost:8081/user/creatementeeprofile"}`, {
         method,
         body: formData,
       });
@@ -115,7 +115,7 @@ const CreateMenteeProfile = () => {
       <h1 className="text-3xl font-bold mb-4">{isEditing ? "Edit" : "Create"} Mentee Profile</h1>
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
         <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700">FullName</label>
+          <label htmlFor="name" className="block text-gray-700">Full Name</label>
           <input
             type="text"
             id="name"
