@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const MentorSearch = () => {
   const [mentors, setMentors] = useState([]);
@@ -12,66 +14,103 @@ const MentorSearch = () => {
     inPerson: false,
   });
   const [hasSearched, setHasSearched] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMentors = async () => {
+      setLoading(true); // Set loading to true
       try {
-        const response = await fetch('http://localhost:8081/user/mentors');
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
+        const response = await axios.get('http://localhost:8081/user/getAllMentors');
+        // if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.data;
+
+        console.log(data)
         setMentors(data);
         setFilteredMentors(data);
       } catch (err) {
         console.error('Error fetching mentors:', err);
+      } finally {
+        setLoading(false); // Set loading to false
       }
     };
 
     fetchMentors();
   }, []);
 
-  useEffect(() => {
-    const filterMentors = () => {
-      const filtered = mentors.filter((mentor) => {
-        const matchesSearchTerm = mentor.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesExpertise = expertiseFilter ? mentor.expertise.includes(expertiseFilter) : true;
-        const matchesExperience = experienceFilter ? mentor.yearsOfExperience >= Number(experienceFilter) : true;
-        const matchesAvailability = availabilityFilter ? mentor.availability.includes(availabilityFilter) : true;
-        const matchesMeetingType =
-          (meetingType.virtual && mentor.meetingType === 'virtual') ||
-          (meetingType.inPerson && mentor.meetingType === 'in-person') ||
-          (!meetingType.virtual && !meetingType.inPerson);
+  const applyFilters = () => {
+    const filtered = mentors.filter((mentor) => {
+      const matchesSearchTerm = mentor.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesExpertise = expertiseFilter ? mentor.expertise.includes(expertiseFilter) : true;
+      const matchesExperience = experienceFilter ? mentor.yearsOfExperience >= Number(experienceFilter) : true;
+      const matchesAvailability = availabilityFilter ? mentor.availability.includes(availabilityFilter) : true;
+      const matchesMeetingType =
+        (meetingType.virtual && mentor.meetingType === 'virtual') ||
+        (meetingType.inPerson && mentor.meetingType === 'in-person') ||
+        (!meetingType.virtual && !meetingType.inPerson);
 
-        return matchesSearchTerm && matchesExpertise && matchesExperience && matchesAvailability && matchesMeetingType;
-      });
-      setFilteredMentors(filtered);
-      setHasSearched(true);
-    };
+      return matchesSearchTerm && matchesExpertise && matchesExperience && matchesAvailability && matchesMeetingType;
+    });
+    setFilteredMentors(filtered);
+    console.log(filtered)
+    setHasSearched(true);
+    console.log({state:filtered})
+    navigate('/searchResults', { state: filtered });
+    
+  };
 
-    filterMentors();
-  }, [searchTerm, expertiseFilter, experienceFilter, availabilityFilter, meetingType, mentors]);
+  const handleReset = () => {
+    setSearchTerm('');
+    setExpertiseFilter('');
+    setExperienceFilter('');
+    setAvailabilityFilter('');
+    setMeetingType({ virtual: false, inPerson: false });
+    setFilteredMentors(mentors); // Reset to original list
+    setHasSearched(false); // Allow all mentors to be shown again
+  };
+
+  // useEffect(() => {
+
+  // }, [searchTerm, expertiseFilter, experienceFilter, availabilityFilter, meetingType]);
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4 text-center">Find a Mentor</h1>
+    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
+      <h2 className="text-4xl font-bold mb-6 text-white">Find a Mentor</h2>
 
-      <div className="mb-4">
+      {/* Search Bar Section */}
+      <div className="flex flex-col md:flex-row mb-4 w-full md:justify-center">
         <input
           type="text"
           placeholder="Search by name"
+          className="border rounded w-full md:w-1/3 p-2 mb-2 md:mb-0 md:mr-2"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <button
+          onClick={applyFilters}
+          className="bg-[#4f759b] text-white rounded px-4 py-2 mb-2 md:mb-0 hover:bg-[#3f6390]"
+        >
+          Search
+        </button>
+        <button
+          onClick={handleReset}
+          className="bg-gray-300 hover:bg-gray-400 rounded px-4 py-2"
+        >
+          Reset
+        </button>
       </div>
 
-      <div className="mb-4">
+      <h2 className="text-2xl font-semibold mb-4 text-white">Or filter Mentors by:</h2>
+
+      {/* Expertise Filter */}
+      <div className="mb-4 w-full md:w-1/2">
         <select
           value={expertiseFilter}
           onChange={(e) => setExpertiseFilter(e.target.value)}
-          className="border p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
           <option value="">Filter by expertise</option>
-          {/* Add expertise options dynamically */}
           <option value="Web Development">Web Development</option>
           <option value="Data Science">Data Science</option>
           <option value="Java">Java</option>
@@ -81,21 +120,23 @@ const MentorSearch = () => {
         </select>
       </div>
 
-      <div className="mb-4">
+      {/* Experience Filter */}
+      <div className="mb-4 w-full md:w-1/2">
         <input
           type="number"
           placeholder="Minimum years of experience"
           value={experienceFilter}
           onChange={(e) => setExperienceFilter(e.target.value)}
-          className="border p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         />
       </div>
 
-      <div className="mb-4">
+      {/* Availability Filter */}
+      <div className="mb-4 w-full md:w-1/2">
         <select
           value={availabilityFilter}
           onChange={(e) => setAvailabilityFilter(e.target.value)}
-          className="border p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
           <option value="">Filter by availability</option>
           <option value="Weekdays">Weekdays</option>
@@ -103,8 +144,9 @@ const MentorSearch = () => {
         </select>
       </div>
 
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Meeting Type</h2>
+      {/* Meeting Type Filters */}
+      <div className="mb-4 w-full md:w-1/2">
+        <h2 className="text-lg font-semibold mb-2 text-white">Meeting Type</h2>
         <div className="flex items-center">
           <label className="flex items-center mr-4">
             <input
@@ -113,7 +155,7 @@ const MentorSearch = () => {
               onChange={(e) => setMeetingType({ ...meetingType, virtual: e.target.checked })}
               className="mr-2 h-4 w-4"
             />
-            <span>Virtual</span>
+            <span className="text-white">Virtual</span>
           </label>
           <label className="flex items-center">
             <input
@@ -122,31 +164,35 @@ const MentorSearch = () => {
               onChange={(e) => setMeetingType({ ...meetingType, inPerson: e.target.checked })}
               className="mr-2 h-4 w-4"
             />
-            <span>In-Person</span>
+            <span className="text-white">In-Person</span>
           </label>
         </div>
       </div>
 
       <button
-        onClick={() => setHasSearched(true)}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+        onClick={applyFilters}
+        className="bg-[#4f759b] text-white rounded px-4 py-2 w-full hover:bg-[#3f6390] focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
       >
         Apply Filters
       </button>
 
-      <ul className="list-disc pl-5 mt-6">
-        {hasSearched && filteredMentors.length === 0 ? (
-          <li>No mentors found</li>
-        ) : (
-          filteredMentors.map((mentor) => (
-            <li key={mentor.id} className="mb-2">
-              <a href={`/mentor/${mentor.id}`} className="text-blue-500 hover:underline">
-                {mentor.name} - {mentor.expertise.join(', ')} ({mentor.yearsOfExperience} years)
-              </a>
-            </li>
-          ))
-        )}
-      </ul>
+      {loading ? (
+        <p className="text-white">Loading...</p>
+      ) : (
+        <ul className="list-disc pl-5 mt-6 w-full md:w-1/2">
+          {hasSearched && filteredMentors.length === 0 ? (
+            <li className="text-white">No mentors found.</li>
+          ) : (
+            filteredMentors.map((mentor) => (
+              <li key={mentor.id} className="mb-2">
+                <a href={`/mentor/${mentor.id}`} className="text-[#4f759b] hover:underline">
+                  {mentor.name} - {mentor.expertise.join(', ')} ({mentor.yearsOfExperience} years)
+                </a>
+              </li>
+            ))
+          )}
+        </ul>
+      )}
     </div>
   );
 };

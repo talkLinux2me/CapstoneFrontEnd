@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Spinner from './Spinner';
 
 const EditMentorProfile = () => {
@@ -7,14 +8,13 @@ const EditMentorProfile = () => {
     const [mentorData, setMentorData] = useState(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchMentorData = async () => {
             try {
-                const response = await fetch(`http://localhost:8081/api/mentors/${id}`);
-                if (!response.ok) throw new Error('Mentor profile not found');
-                const data = await response.json();
-                setMentorData(data);
+                const response = await axios.get(`http://localhost:8081/api/mentors/${id}`);
+                setMentorData(response.data);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -32,16 +32,8 @@ const EditMentorProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:8081/api/mentors/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(mentorData),
-            });
-            if (!response.ok) throw new Error('Failed to update profile');
-            // Optionally navigate back or show a success message
-            window.location.href = `/mentors/${id}`;
+            await axios.put(`http://localhost:8081/api/mentors/${id}`, mentorData);
+            navigate(`/mentor/:id`);
         } catch (err) {
             setError(err.message);
         }
@@ -56,9 +48,9 @@ const EditMentorProfile = () => {
     }
 
     return (
-        <div className="container mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-4">Edit {mentorData.name}'s Profile</h1>
-            <form onSubmit={handleSubmit}>
+        <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
+            <h1 className="text-3xl font-bold mb-4 text-white">Edit {mentorData.name}'s Profile</h1>
+            <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
                 <div className="mb-4">
                     <label className="block text-gray-700">Name:</label>
                     <input
@@ -66,7 +58,7 @@ const EditMentorProfile = () => {
                         name="name"
                         value={mentorData.name}
                         onChange={handleChange}
-                        className="border rounded p-2 w-full"
+                        className="border rounded p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
                     />
                 </div>
                 <div className="mb-4">
@@ -76,7 +68,7 @@ const EditMentorProfile = () => {
                         name="email"
                         value={mentorData.email}
                         onChange={handleChange}
-                        className="border rounded p-2 w-full"
+                        className="border rounded p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
                     />
                 </div>
                 <div className="mb-4">
@@ -86,7 +78,7 @@ const EditMentorProfile = () => {
                         name="location"
                         value={mentorData.location}
                         onChange={handleChange}
-                        className="border rounded p-2 w-full"
+                        className="border rounded p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
                     />
                 </div>
                 <div className="mb-4">
@@ -96,7 +88,7 @@ const EditMentorProfile = () => {
                         name="interests"
                         value={mentorData.interests.join(', ')}
                         onChange={(e) => handleChange({ target: { name: 'interests', value: e.target.value.split(', ') } })}
-                        className="border rounded p-2 w-full"
+                        className="border rounded p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
                         placeholder="Comma separated"
                     />
                 </div>
@@ -107,11 +99,11 @@ const EditMentorProfile = () => {
                         name="skills"
                         value={mentorData.skills.join(', ')}
                         onChange={(e) => handleChange({ target: { name: 'skills', value: e.target.value.split(', ') } })}
-                        className="border rounded p-2 w-full"
+                        className="border rounded p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
                         placeholder="Comma separated"
                     />
                 </div>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded" type="submit">
+                <button className="bg-[#4f759b] text-white px-4 py-2 rounded hover:bg-[#3f6390]" type="submit">
                     Save Changes
                 </button>
             </form>

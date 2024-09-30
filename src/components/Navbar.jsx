@@ -1,8 +1,26 @@
-import React, { useState } from "react";
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+let navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const[loggedIn, setLoggedIn] = useState(false)
+
+const handleLogout =() =>{
+    setLoggedIn(false)
+    localStorage.removeItem("userID")
+    navigate("/")
+    window.location.reload()
+  }
+
+
+  useEffect(() =>{
+    console.log(localStorage.getItem("userID"))
+    if(localStorage.getItem("userID")){
+      setLoggedIn(true)
+    }
+  
+  })
 
   return (
     <nav className="navbar p-6">
@@ -33,7 +51,53 @@ const Navbar = () => {
           >
             For Mentors
           </NavLink>
+
+          {loggedIn ? <>
+          
           <NavLink
+            to="/"
+            onClick={handleLogout}
+            className={({ isActive }) => 
+              `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
+            }
+          >
+            Log Out
+          </NavLink>
+          </>  : <>  <NavLink
+            to="/register"
+            className={({ isActive }) => 
+              `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
+            }
+          >
+            Registration
+          </NavLink>
+          <NavLink
+            to="/login"
+            className={({ isActive }) => 
+              `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
+            }
+          >
+            Login
+          </NavLink></>
+
+          }
+      
+
+
+          {/* {
+
+            loggedIn ? <>
+                 <NavLink
+                 onClick={localStorage.removeItem("userID")}
+            to="/"
+            className={({ isActive }) => 
+              `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
+            }
+          >
+            Log out
+          </NavLink>
+            </> : <>
+              <NavLink
             to="/register"
             className={({ isActive }) => 
               `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
@@ -49,6 +113,9 @@ const Navbar = () => {
           >
             Login
           </NavLink>
+            
+            </>
+          } */}
         </div>
         <button 
           className="md:hidden text-white"

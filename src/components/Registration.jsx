@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -10,8 +11,7 @@ const Registration = () => {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,40 +42,33 @@ const Registration = () => {
       setError('Password must be at least 6 characters.');
       return;
     }
-    console.log(JSON.stringify(formData));
-    // Make the API call to register the user
+
     try {
-      const response = await fetch('http://localhost:8081/user/register', { 
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-    
+      const response = await axios.post('http://localhost:8081/user/register', { 
+        ...formData
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();  // Get error message from response
-        throw new Error(errorData.message || 'Registration failed. User may already exist.');
-      }
-
       setSuccess('Registration successful! Redirecting to profile...');
+      console.log( await response.data.id)
+      localStorage.setItem("userID", await response.data.id);
       setTimeout(() => {
-        // Redirect to the appropriate profile page based on the role
         if (formData.role === 'mentee') {
-          navigate('/creatementeeprofile'); // Redirect to mentee profile
+          navigate('/creatementeeprofile');
+          window.location.reload()
         } else {
-          navigate('/creatementorprofile'); // Redirect to mentor profile
+          navigate('/creatementorprofile');
+          window.location.reload()
+
         }
       }, 2000);
     } catch (err) {
-      setError(err.message, "something is wrong");
+      setError(err.message || 'Registration failed. Please try again.');
     } 
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center mb-4">Register</h1>
+    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
+      <h1 className="text-4xl font-bold mb-6 text-white">Register</h1>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {success && <p className="text-green-500 mb-4">{success}</p>}
@@ -89,7 +82,7 @@ const Registration = () => {
             value={formData.name}
             onChange={handleChange}
             required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           />
         </div>
         <div className="mb-4">
@@ -101,7 +94,7 @@ const Registration = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           />
         </div>
         <div className="mb-4">
@@ -113,7 +106,7 @@ const Registration = () => {
             value={formData.password}
             onChange={handleChange}
             required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           />
         </div>
         <div className="mb-4">
@@ -122,7 +115,7 @@ const Registration = () => {
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           >
             <option value="mentee">Mentee</option>
             <option value="mentor">Mentor</option>
@@ -130,7 +123,7 @@ const Registration = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700"
+          className="w-full bg-[#4f759b] text-white font-semibold py-2 rounded hover:bg-[#3f6390] focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
           Register
         </button>

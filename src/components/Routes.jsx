@@ -15,6 +15,7 @@ import TypewriterEffect from './TypewriterEffect';
 import MatchingComponent from './MatchingComponent';
 import EditMenteeProfile from './EditMenteeProfile';
 import EditMentorProfile from './EditMentorProfile';
+import SearchResults from './SearchResults';
 
 const AppRoutes = () => {
   return (
@@ -36,6 +37,7 @@ const AppRoutes = () => {
         <Route path="/matchingcomponent" element={<MatchingComponent/>} />
         <Route path="/editmenteeprofile" element={<EditMenteeProfile/>} />
         <Route path="/editmentorprofile" element={<EditMentorProfile/>} />
+        <Route path="/searchResults" element={<SearchResults/>}/>
       </Routes>
     
     </>

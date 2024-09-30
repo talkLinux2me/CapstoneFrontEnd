@@ -6,7 +6,7 @@
 
 .backdrop-blur-background {
     backdrop-filter: blur(10px);
-    background-color: rgb(127, 123, 136); /* Primary color with some transparency */
+    background-color: rgb(133, 128, 143); /* Primary color with some transparency */
   }
   
   .checkbox-label {
@@ -14,7 +14,7 @@
     }
     
     .checkbox-label:hover {
-      color: #3b82f6; /* Tailwind's blue-500 */
+      color: #4f759b; /* Tailwind's blue-500 */
     }
     
     /* You can also style the checkbox itself if desired */

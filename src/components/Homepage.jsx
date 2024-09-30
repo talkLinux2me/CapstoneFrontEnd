@@ -15,8 +15,8 @@ const Homepage = () => {
             Share your expertise and guide someone on their journey. Help others grow and succeed!
           </p>
           <div className="flex justify-center">
-  <a href="/mentors" className="text-[#571f4e] font-semibold hover:underline">
-    Find a Mentor
+  <a href="/mentees" className="text-[#571f4e] font-semibold hover:underline">
+    Find a Mentee
   </a>
 </div>
 
@@ -39,7 +39,7 @@ const Homepage = () => {
             Sign up today to start connecting and collaborating with mentors and mentees.
           </p>
           <div className="flex justify-center">
-  <a href="/mentors" className="text-[#571f4e] font-semibold hover:underline">
+  <a href="/register" className="text-[#571f4e] font-semibold hover:underline">
     Join Now
   </a>
 </div>
