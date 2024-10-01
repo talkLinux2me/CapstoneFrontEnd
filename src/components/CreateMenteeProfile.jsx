@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Spinner from './Spinner';
 
 const states = [
@@ -12,29 +13,30 @@ const states = [
 ];
 
 const CreateMenteeProfile = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
   const [menteeData, setMenteeData] = useState({
-    name: '',
-    email: '',
     location: '',
-    interests: [],
+     interests: [],
     skills: [],
     personalStatement: '',
-    profilePic: null,
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-
+  let menteeID = localStorage.getItem("userID");
   useEffect(() => {
+    let menteeID = localStorage.getItem("userID");
     const fetchMenteeData = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/api/mentees/${id}`);
+
+   
+
+        const response = await fetch(`http://localhost:8081/user/${menteeID}`);
         if (!response.ok) throw new Error('Mentee profile not found');
         const data = await response.json();
         setMenteeData(data);
         setIsEditing(true); // Set editing mode if data is fetched
+        console.log(menteeData)
       } catch (err) {
         setError(err.message);
       } finally {
@@ -42,12 +44,12 @@ const CreateMenteeProfile = () => {
       }
     };
 
-    if (id) {
+    if (menteeID) {
       fetchMenteeData();
     } else {
       setLoading(false); // If there's no ID, skip loading
     }
-  }, [id]);
+  }, [menteeID]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,6 +57,8 @@ const CreateMenteeProfile = () => {
       ...menteeData,
       [name]: value,
     });
+
+  
   };
 
   const handleArrayChange = (e) => {
@@ -64,6 +68,8 @@ const CreateMenteeProfile = () => {
       [name]: value.split(',').map((item) => item.trim()), // Split input into an array
     }));
   };
+
+  
 
   const handleFileChange = (e) => {
     setMenteeData({
@@ -75,70 +81,40 @@ const CreateMenteeProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    Object.entries(menteeData).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        formData.append(key, JSON.stringify(value)); // Convert array to JSON string
-      } else {
-        formData.append(key, value);
-      }
-    });
+    // Create a plain object to send as JSON
+    const payload = {
+        ...menteeData,
+        interests: menteeData.interests, // Keep as array
+        skills: menteeData.skills, // Keep as array
+    };
+
+    console.log(payload, "payload data"); // Log the payload to check its structure
 
     try {
-      const method = isEditing ? 'PUT' : 'POST';
-      const response = await fetch(`http://localhost:8081/user/creatementeeprofile"}`, {
-        method,
-        body: formData,
-      });
+        const response = await axios.put(`http://localhost:8081/user/edit/${menteeID}`, payload, {
+            headers: {
+                'Content-Type': 'application/json' // Set content type to application/json
+            }
+        });
 
-      if (!response.ok) throw new Error('Profile update failed');
+        if (response.status !== 200) throw new Error('Profile update failed');
 
-      const data = await response.json();
-      setMenteeData(data);
-      setError(''); // Clear error message on success
-      navigate(`/mentee/${data.id}`); // Redirect to the mentee profile after saving
+        const data = response.data; // Get the updated data
+        setMenteeData(data);
     } catch (err) {
-      setError(err.message);
+        setError(err.message);
     }
-  };
+};
 
-  if (loading) {
-    return <Spinner />;
-  }
 
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
-
+ 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">{isEditing ? "Edit" : "Create"} Mentee Profile</h1>
+      <h1 className="text-3xl font-bold mb-4">Mentee Profile</h1>
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700">Full Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={menteeData.name}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={menteeData.email}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
+     
+       
+        {/* <div className="mb-4">
           <label htmlFor="profilePic" className="block text-gray-700">Profile Picture (optional)</label>
           <input
             type="file"
@@ -148,7 +124,7 @@ const CreateMenteeProfile = () => {
             onChange={handleFileChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />
-        </div>
+        </div> */}
         <div className="mb-4">
           <label htmlFor="location" className="block text-gray-700">Location</label>
           <select
@@ -171,7 +147,8 @@ const CreateMenteeProfile = () => {
             type="text"
             id="interests"
             name="interests"
-            value={menteeData.interests.join(', ')} // Convert array to string for display
+            value={menteeData.interests ? menteeData.interests.join(', ') : ''}
+          
             onChange={handleArrayChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />
@@ -182,7 +159,8 @@ const CreateMenteeProfile = () => {
             type="text"
             id="skills"
             name="skills"
-            value={menteeData.skills.join(', ')} // Convert array to string for display
+            value={menteeData.skills ? menteeData.skills.join(', ') : ''}
+        
             onChange={handleArrayChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />

@@ -1,63 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function MenteeSearch() {
-  const [searchTerm, setSearchTerm] = useState('');
   const [mentees, setMentees] = useState([]);
   const [filteredMentees, setFilteredMentees] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [locationFilter, setLocationFilter] = useState('');
-  const [expertiseFilter, setExpertiseFilter] = useState('');
-  const [meetingType, setMeetingType] = useState({ virtual: false, inPerson: false });
-  const [availabilityFilter, setAvailabilityFilter] = useState('');
+  const [locationFilter, setLocationFilter] = useState("");
+  const [expertiseFilter, setExpertiseFilter] = useState("");
+  const [meetingType, setMeetingType] = useState({
+    virtual: false,
+    inPerson: false,
+  });
+  const [availabilityFilter, setAvailabilityFilter] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
 
   const navigate = useNavigate();
 
-  const fetchMentees = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axios.get('http://localhost:8081/user/getAllMentees');
-      setMentees(response.data);
-      setFilteredMentees(response.data);
-    } catch (error) {
-      console.error('Error fetching mentees:', error);
-      setError('Error fetching mentees. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    
+    const fetchMentees = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get(
+          "http://localhost:8081/user/getAllMentees"
+        );
+
+        const data = await response.data;
+
+        console.log(data);
+        setMentees(data);
+      } catch (error) {
+        console.error("Error fetching mentees:", error);
+        setError("Error fetching mentees. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchMentees();
   }, []);
 
   const applyFilters = () => {
-    const filtered = mentees.filter(mentee => {
-      const matchesSearchTerm = mentee.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesLocation = locationFilter ? mentee.location?.toLowerCase() === locationFilter.toLowerCase() : true;
-      const matchesExpertise = expertiseFilter ? mentee.expertise?.includes(expertiseFilter) : true;
-      const matchesMeetingType =
-        (meetingType.virtual && mentee.meetingType === 'virtual') ||
-        (meetingType.inPerson && mentee.meetingType === 'in-person');
-      const matchesAvailability = availabilityFilter ? mentee.availability?.includes(availabilityFilter) : true;
+    const filtered = mentees.filter((mentee) => {
 
-      return matchesSearchTerm && matchesLocation && matchesExpertise && matchesMeetingType && matchesAvailability;
+      const matchesSearchTerm = mentee.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesLocation = locationFilter
+        ? mentee.location?.toLowerCase() === locationFilter.toLowerCase()
+        : true;
+
+        const matchesExpertise = expertiseFilter
+        ? mentee.expertise?.some(exp => exp.toLowerCase() === expertiseFilter.toLowerCase())
+        : true;
+        
+      const matchesMeetingType =
+        (meetingType.virtual && mentee.meetingType === "virtual") ||
+        (meetingType.inPerson && mentee.meetingType === "in-person") ||
+        (!meetingType.virtual && !meetingType.inPerson);
+
+      const matchesAvailability = availabilityFilter
+        ? mentee.availability?.includes(availabilityFilter)
+        : true;
+
+      return (
+        matchesSearchTerm &&
+        matchesLocation &&
+        matchesExpertise &&
+        matchesMeetingType &&
+        matchesAvailability
+    );
     });
+
+    setFilteredMentees(filtered)
+    console.log(filtered , "filtered");
+    console.log(filteredMentees, "filteredMentees")
     setFilteredMentees(filtered);
-    navigate('/searchResults', { state: filtered });
+    console.log(filteredMentees);
+    navigate('/searchResults', { state: filtered   });
   };
 
   const handleReset = () => {
-    setSearchTerm('');
-    setLocationFilter('');
-    setExpertiseFilter('');
+    setSearchTerm("");
+    setLocationFilter("");
+    setExpertiseFilter("");
     setMeetingType({ virtual: false, inPerson: false });
-    setAvailabilityFilter('');
+    setAvailabilityFilter("");
     setFilteredMentees(mentees);
     setHasSearched(false);
   };
@@ -72,7 +105,7 @@ function MenteeSearch() {
           placeholder="Search by name"
           className="border rounded w-full md:w-1/3 p-2 mb-2 md:mb-0 md:mr-2"
           value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <button
           onClick={applyFilters}
@@ -90,19 +123,73 @@ function MenteeSearch() {
         </button>
       </div>
 
-      <h2 className="text-2xl font-semibold mb-4 text-white">Or filter Mentees by:</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-white">
+        Or filter Mentees by:
+      </h2>
 
       {/* Location Filter */}
       <div className="mb-4 w-full md:w-1/2">
         <select
           value={locationFilter}
-          onChange={e => setLocationFilter(e.target.value)}
+          onChange={(e) => setLocationFilter(e.target.value)}
           className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
           <option value="">Filter by State</option>
-          {/* All states here */}
-          {["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"].map(state => (
-            <option key={state} value={state}>{state}</option>
+          {[
+            "Alabama",
+            "Alaska",
+            "Arizona",
+            "Arkansas",
+            "California",
+            "Colorado",
+            "Connecticut",
+            "Delaware",
+            "Florida",
+            "Georgia",
+            "Hawaii",
+            "Idaho",
+            "Illinois",
+            "Indiana",
+            "Iowa",
+            "Kansas",
+            "Kentucky",
+            "Louisiana",
+            "Maine",
+            "Maryland",
+            "Massachusetts",
+            "Michigan",
+            "Minnesota",
+            "Mississippi",
+            "Missouri",
+            "Montana",
+            "Nebraska",
+            "Nevada",
+            "New Hampshire",
+            "New Jersey",
+            "New Mexico",
+            "New York",
+            "North Carolina",
+            "North Dakota",
+            "Ohio",
+            "Oklahoma",
+            "Oregon",
+            "Pennsylvania",
+            "Rhode Island",
+            "South Carolina",
+            "South Dakota",
+            "Tennessee",
+            "Texas",
+            "Utah",
+            "Vermont",
+            "Virginia",
+            "Washington",
+            "West Virginia",
+            "Wisconsin",
+            "Wyoming",
+          ].map((state) => (
+            <option key={state} value={state}>
+              {state}
+            </option>
           ))}
         </select>
       </div>
@@ -111,7 +198,7 @@ function MenteeSearch() {
       <div className="mb-4 w-full md:w-1/2">
         <select
           value={expertiseFilter}
-          onChange={e => setExpertiseFilter(e.target.value)}
+          onChange={(e) => setExpertiseFilter(e.target.value)}
           className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
           <option value="">Filter by goals</option>
@@ -130,10 +217,11 @@ function MenteeSearch() {
       <div className="mb-4 w-full md:w-1/2">
         <select
           value={availabilityFilter}
-          onChange={e => setAvailabilityFilter(e.target.value)}
+          onChange={(e) => setAvailabilityFilter(e.target.value)}
           className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
-          <option value="">Filter by availability</option>
+          <option value="">Filter by availability</option>{" "}
+          {/* allowing the mentor to have more targeted control in choices of mentees */}
           <option value="Monday">Monday</option>
           <option value="Tuesday">Tuesday</option>
           <option value="Wednesday">Wednesday</option>
@@ -152,7 +240,12 @@ function MenteeSearch() {
             <input
               type="checkbox"
               checked={meetingType.virtual}
-              onChange={() => setMeetingType({ ...meetingType, virtual: !meetingType.virtual })}
+              onChange={() =>
+                setMeetingType({
+                  ...meetingType,
+                  virtual: !meetingType.virtual,
+                })
+              }
               className="mr-2 h-4 w-4"
             />
             <span className="text-white">Virtual</span>
@@ -161,7 +254,12 @@ function MenteeSearch() {
             <input
               type="checkbox"
               checked={meetingType.inPerson}
-              onChange={() => setMeetingType({ ...meetingType, inPerson: !meetingType.inPerson })}
+              onChange={() =>
+                setMeetingType({
+                  ...meetingType,
+                  inPerson: !meetingType.inPerson,
+                })
+              }
               className="mr-2 h-4 w-4"
             />
             <span className="text-white">In-Person</span>

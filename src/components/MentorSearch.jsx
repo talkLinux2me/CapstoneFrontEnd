@@ -29,6 +29,7 @@ const MentorSearch = () => {
         console.log(data)
         setMentors(data);
         setFilteredMentors(data);
+      
       } catch (err) {
         console.error('Error fetching mentors:', err);
       } finally {
@@ -54,7 +55,6 @@ const MentorSearch = () => {
     });
     setFilteredMentors(filtered);
     console.log(filtered)
-    setHasSearched(true);
     console.log({state:filtered})
     navigate('/searchResults', { state: filtered });
     

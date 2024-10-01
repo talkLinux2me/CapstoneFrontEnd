@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate , useParams} from 'react-router-dom';
+
 
 function SearchResults() {
   const [result, setResult] = useState([]);
@@ -8,6 +9,8 @@ function SearchResults() {
   const location = useLocation();
   const navigate = useNavigate();
   const results = location.state || [];
+
+  
 
   useEffect(() => {
     console.log(results);
@@ -56,7 +59,7 @@ function SearchResults() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full md:w-2/3">
           {result.map((user) => (
-            <div key={user.id} className="bg-white shadow-md rounded-lg p-4 m-2 transition transform hover:scale-105">
+            <div key={user.id} className="bg-white shadow-md rounded-lg p-4 m-2 transition transform hover:scale-105" onClick={() => navigate(`/user/${user.id}`)}>
               <h3 className="text-xl font-bold text-[#4f759b]">{user.name}</h3>
               <p><strong>Email:</strong> {user.email}</p>
               <p><strong>Role:</strong> {user.role}</p>

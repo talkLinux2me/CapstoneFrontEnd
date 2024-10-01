@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Spinner from './Spinner';
+import axios from 'axios';
 
 const states = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida",
@@ -12,11 +13,9 @@ const states = [
 ];
 
 const CreateMentorProfile = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
   const [mentorData, setMentorData] = useState({
-    name: '',
-    email: '',
+  
     location: '',
     yearsOfExperience: '',
     availability: '',
@@ -30,15 +29,17 @@ const CreateMentorProfile = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  let mentorID = localStorage.getItem("userID");
 
   useEffect(() => {
     const fetchMentorData = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/api/mentors/${id}`);
+        const response = await fetch(`http://localhost:8081/user/${mentorID}`);
         if (!response.ok) throw new Error('Mentor profile not found');
         const data = await response.json();
         setMentorData(data);
         setIsEditing(true);
+        console.log(mentorData)
       } catch (err) {
         setError(err.message);
       } finally {
@@ -46,12 +47,12 @@ const CreateMentorProfile = () => {
       }
     };
 
-    if (id) {
+    if (mentorID) {
       fetchMentorData();
     } else {
       setLoading(false);
     }
-  }, [id]);
+  }, [mentorID]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -70,38 +71,39 @@ const CreateMentorProfile = () => {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
     setMentorData({
       ...mentorData,
-      profilePic: file,
+      profilePic:  e.target.files[0],
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    for (const key in mentorData) {
-      formData.append(key, mentorData[key]);
-    }
-
-    try {
-      const method = isEditing ? 'PUT' : 'POST';
-      const response = await fetch(`http://localhost:8081/api/mentors${isEditing ? `/${id}` : ''}`, {
-        method,
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error('Profile update failed');
-
-      const data = await response.json();
-      setMentorData(data);
-      setError('');
-      navigate(`/mentor/${data.id}`);
-    } catch (err) {
-      setError(err.message);
-    }
+    const payload = {
+      ...mentorData,
+      interests: mentorData.interests, // Keep as array
+      skills: mentorData.skills, 
+      certifications: mentorData.certifications,// Keep as array
   };
+ 
+  console.log(payload, "payload data"); // Log the payload to check its structure
+ 
+  try {
+    const response = await axios.put(`http://localhost:8081/user/edit/${mentorID}`, payload, {
+        headers: {
+            'Content-Type': 'application/json' // Set content type to application/json
+        }
+    });
+
+    if (response.status !== 200) throw new Error('Profile update failed');
+    
+    const data = response.data; // Get the updated data
+    setMentorData(data);
+} catch (err) {
+    setError(err.message);
+}
+};
 
   if (loading) {
     return <Spinner />;
@@ -113,33 +115,10 @@ const CreateMentorProfile = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">{isEditing ? "Edit" : "Create"} Mentor Profile</h1>
+      <h1 className="text-3xl font-bold mb-4"> Mentor Profile</h1>
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
         
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700">Full Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={mentorData.name}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={mentorData.email}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
+    
         <div className="mb-4">
           <label htmlFor="profilePic" className="block text-gray-700">Profile Picture (optional) </label>
           <input
@@ -233,7 +212,7 @@ const CreateMentorProfile = () => {
             type="text"
             id="skills"
             name="skills"
-            value={mentorData.skills.join(', ')}
+            value={mentorData.skills ? mentorData.skills.join(', ') : ''}
             onChange={handleArrayChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />
@@ -245,6 +224,8 @@ const CreateMentorProfile = () => {
             name="personalStatement"
             value={mentorData.personalStatement}
             onChange={handleChange}
+            required
+             placeholder="Write your personal statement here in your preferred coding language ..."
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
             rows="4"
           />

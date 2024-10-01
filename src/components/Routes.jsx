@@ -18,6 +18,7 @@ import EditMentorProfile from './EditMentorProfile';
 import SearchResults from './SearchResults';
 import ForgotPassword from './ForgotPassword';
 import Footer from './Footer';
+import UserProfile from './UserProfile';
 
 const AppRoutes = () => {
   return (
@@ -42,6 +43,7 @@ const AppRoutes = () => {
         <Route path="/searchResults" element={<SearchResults/>}/>
         <Route path="/forgot-password" element={<ForgotPassword />} />  
         <Route path="/footer" element={<Footer/>} /> 
+        <Route path="/user/:id" element={<UserProfile/>}/>
       </Routes>
     
     </>

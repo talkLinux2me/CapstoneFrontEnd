@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from 'react-router-dom';
+import logo from "../Images/m22m.jpg"
 
 
 const Navbar = () => {
@@ -23,8 +24,14 @@ const Navbar = () => {
 
   return (
     <nav className="navbar p-6 bg-purple-700">
+
+
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-white text-4xl font-bold dance">M2M</h1> {/* Add the dance class here */}
+        {/* <img src={logo} alt="logo" className="mr-2" /> */}
+        
+        <h1 className="text-white text-4xl font-bold dance"></h1>
+        
+         {/* Add the dance class here */}
         <div className="hidden md:flex space-x-4">
           <NavLink
             to="/"
