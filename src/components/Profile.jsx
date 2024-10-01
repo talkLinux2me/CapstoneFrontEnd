@@ -10,7 +10,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/api/${userType}s/${id}`);
+        const response = await fetch(`http://localhost:8081/user`);
         if (!response.ok) throw new Error(`${userType.charAt(0).toUpperCase() + userType.slice(1)} profile not found`);
         const data = await response.json();
         setProfileData(data);

@@ -122,14 +122,26 @@ const MentorSearch = () => {
 
       {/* Experience Filter */}
       <div className="mb-4 w-full md:w-1/2">
-        <input
-          type="number"
-          placeholder="Minimum years of experience"
-          value={experienceFilter}
-          onChange={(e) => setExperienceFilter(e.target.value)}
-          className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
-        />
-      </div>
+  <select
+    value={experienceFilter}
+    onChange={(e) => setExperienceFilter(e.target.value)}
+    className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
+  >
+    <option value="">Filter by Years of Experience</option>
+    <option value="0">0+</option>
+    <option value="1">1+</option>
+    <option value="2">2+</option>
+    <option value="3">3+</option>
+    <option value="4">4+</option>
+    <option value="5">5+</option>
+    <option value="6">6+</option>
+    <option value="7">7+</option>
+    <option value="8">8+</option>
+    <option value="9">9+</option>
+    <option value="10">10+</option>
+  </select>
+</div>
+
 
       {/* Availability Filter */}
       <div className="mb-4 w-full md:w-1/2">

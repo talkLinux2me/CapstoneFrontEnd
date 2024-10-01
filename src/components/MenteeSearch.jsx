@@ -11,10 +11,7 @@ function MenteeSearch() {
 
   const [locationFilter, setLocationFilter] = useState('');
   const [expertiseFilter, setExpertiseFilter] = useState('');
-  const [meetingType, setMeetingType] = useState({
-    virtual: false,
-    inPerson: false,
-  });
+  const [meetingType, setMeetingType] = useState({ virtual: false, inPerson: false });
   const [availabilityFilter, setAvailabilityFilter] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
 
@@ -27,7 +24,6 @@ function MenteeSearch() {
       const response = await axios.get('http://localhost:8081/user/getAllMentees');
       setMentees(response.data);
       setFilteredMentees(response.data);
-      console.log(response.data)
     } catch (error) {
       console.error('Error fetching mentees:', error);
       setError('Error fetching mentees. Please try again later.');
@@ -53,11 +49,6 @@ function MenteeSearch() {
       return matchesSearchTerm && matchesLocation && matchesExpertise && matchesMeetingType && matchesAvailability;
     });
     setFilteredMentees(filtered);
-    setHasSearched(true);
-
-    console.log(filtered)
-    setHasSearched(true);
-    console.log({state:filtered})
     navigate('/searchResults', { state: filtered });
   };
 
@@ -109,8 +100,10 @@ function MenteeSearch() {
           className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
           <option value="">Filter by State</option>
-          <option value="California">California</option>
-          <option value="Texas">Texas</option>
+          {/* All states here */}
+          {["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"].map(state => (
+            <option key={state} value={state}>{state}</option>
+          ))}
         </select>
       </div>
 
@@ -121,7 +114,7 @@ function MenteeSearch() {
           onChange={e => setExpertiseFilter(e.target.value)}
           className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
-          <option value="">Filter by goals</option>
+          <option value="">Filter by expertise</option>
           <option value="JavaScript">JavaScript</option>
           <option value="Java">Java</option>
           <option value="SQL">SQL</option>
@@ -180,7 +173,6 @@ function MenteeSearch() {
       >
         Apply Filters
       </button>
-
     </div>
   );
 }

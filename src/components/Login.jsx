@@ -83,7 +83,7 @@ const Login = () => {
           Login
         </button>
         <p className="mt-4 text-sm text-center">
-          <a href="/reset-password" className="text-[#4f759b] hover:underline">
+          <a href="#" onClick={() => navigate('/forgot-password')} className="text-[#4f759b] hover:underline">
             Forgot Password?
           </a>
         </p>

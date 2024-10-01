@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function SearchResults() {
   const [result, setResult] = useState([]);
   const location = useLocation();
+  const navigate = useNavigate();
   const results = location.state || [];
 
   useEffect(() => {
@@ -14,6 +15,15 @@ function SearchResults() {
   return (
     <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
       <h2 className="text-4xl font-bold mb-6 text-white">Search Results</h2>
+
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="bg-[#4f759b] text-white rounded px-4 py-2 mb-4 hover:bg-[#3f6390] transition duration-200 ease-in-out"
+        aria-label="Go back to the previous page"
+      >
+        Back
+      </button>
 
       {result.length === 0 ? (
         <p className="text-white">No results found.</p>

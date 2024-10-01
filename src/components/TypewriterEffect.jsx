@@ -32,9 +32,9 @@ const TypewriterEffect = () => {
         setTimeout(() => {
           setMessageIndex((prev) => (prev + 1) % messages.length);
           setDisplayedText("");
-        }, 2000); 
+        }, 10000); 
       }
-    }, 50); 
+    }, ); 
 
     return () => clearInterval(interval);
   }, [messageIndex]);

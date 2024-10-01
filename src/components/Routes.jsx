@@ -16,6 +16,8 @@ import MatchingComponent from './MatchingComponent';
 import EditMenteeProfile from './EditMenteeProfile';
 import EditMentorProfile from './EditMentorProfile';
 import SearchResults from './SearchResults';
+import ForgotPassword from './ForgotPassword';
+import Footer from './Footer';
 
 const AppRoutes = () => {
   return (
@@ -38,6 +40,8 @@ const AppRoutes = () => {
         <Route path="/editmenteeprofile" element={<EditMenteeProfile/>} />
         <Route path="/editmentorprofile" element={<EditMentorProfile/>} />
         <Route path="/searchResults" element={<SearchResults/>}/>
+        <Route path="/forgot-password" element={<ForgotPassword />} />  
+        <Route path="/footer" element={<Footer/>} /> 
       </Routes>
     
     </>

@@ -2,11 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-
+@keyframes dance {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    25% {
+      transform: translateY(-10px) rotate(5deg);
+    }
+    50% {
+      transform: translateY(0) rotate(-5deg);
+    }
+    75% {
+      transform: translateY(-5px) rotate(3deg);
+    }
+  }
+  
+  .dance {
+    display: inline-block;
+    animation: dance 1s infinite;
+  }
+  
 
 .backdrop-blur-background {
     backdrop-filter: blur(10px);
-    background-color: rgb(133, 128, 143); /* Primary color with some transparency */
+    background-color: rgb(159, 155, 167); /* Primary color with some transparency */
   }
   
   .checkbox-label {
@@ -60,8 +79,14 @@
       }
       
       .navbar {
-        background: linear-gradient(270deg, #6f0f8f, #a455b6, #6f0f8f);
+        background: linear-gradient(270deg, #8b19b1, #d887ea, #6f0f8f);
         background-size: 400% 400%;
         animation: wave-gradient 15s ease infinite;
+      }
+      
+      footer {
+        position: relative;
+        bottom: 0;
+        width: 100%;
       }
       

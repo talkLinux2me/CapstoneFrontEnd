@@ -1,31 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
-let navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-  const[loggedIn, setLoggedIn] = useState(false)
 
-const handleLogout =() =>{
-    setLoggedIn(false)
-    localStorage.removeItem("userID")
-    navigate("/")
-    window.location.reload()
+const Navbar = () => {
+  let navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    localStorage.removeItem("userID");
+    navigate("/");
+    window.location.reload();
   }
 
-
-  useEffect(() =>{
-    console.log(localStorage.getItem("userID"))
-    if(localStorage.getItem("userID")){
-      setLoggedIn(true)
+  useEffect(() => {
+    console.log(localStorage.getItem("userID"));
+    if (localStorage.getItem("userID")) {
+      setLoggedIn(true);
     }
-  
-  })
+  }, []);
 
   return (
-    <nav className="navbar p-6">
+    <nav className="navbar p-6 bg-purple-700">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-white text-2xl font-bold">M2M</h1>
+        <h1 className="text-white text-4xl font-bold dance">M2M</h1> {/* Add the dance class here */}
         <div className="hidden md:flex space-x-4">
           <NavLink
             to="/"
@@ -52,70 +51,36 @@ const handleLogout =() =>{
             For Mentors
           </NavLink>
 
-          {loggedIn ? <>
-          
-          <NavLink
-            to="/"
-            onClick={handleLogout}
-            className={({ isActive }) => 
-              `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
-            }
-          >
-            Log Out
-          </NavLink>
-          </>  : <>  <NavLink
-            to="/register"
-            className={({ isActive }) => 
-              `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
-            }
-          >
-            Registration
-          </NavLink>
-          <NavLink
-            to="/login"
-            className={({ isActive }) => 
-              `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
-            }
-          >
-            Login
-          </NavLink></>
-
-          }
-      
-
-
-          {/* {
-
-            loggedIn ? <>
-                 <NavLink
-                 onClick={localStorage.removeItem("userID")}
-            to="/"
-            className={({ isActive }) => 
-              `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
-            }
-          >
-            Log out
-          </NavLink>
-            </> : <>
+          {loggedIn ? (
+            <NavLink
+              to="/"
+              onClick={handleLogout}
+              className={({ isActive }) => 
+                `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
+              }
+            >
+              Log Out
+            </NavLink>
+          ) : (
+            <>
               <NavLink
-            to="/register"
-            className={({ isActive }) => 
-              `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
-            }
-          >
-            Registration
-          </NavLink>
-          <NavLink
-            to="/login"
-            className={({ isActive }) => 
-              `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
-            }
-          >
-            Login
-          </NavLink>
-            
+                to="/register"
+                className={({ isActive }) => 
+                  `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
+                }
+              >
+                Registration
+              </NavLink>
+              <NavLink
+                to="/login"
+                className={({ isActive }) => 
+                  `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple700' : ''}`
+                }
+              >
+                Login
+              </NavLink>
             </>
-          } */}
+          )}
         </div>
         <button 
           className="md:hidden text-white"
