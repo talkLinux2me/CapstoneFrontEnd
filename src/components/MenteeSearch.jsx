@@ -114,12 +114,15 @@ function MenteeSearch() {
           onChange={e => setExpertiseFilter(e.target.value)}
           className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
-          <option value="">Filter by expertise</option>
-          <option value="JavaScript">JavaScript</option>
+          <option value="">Filter by goals</option>
+          <option value="Web Development">Web Development</option>
+          <option value="AI">Artificial Intelligence</option>
           <option value="Java">Java</option>
+          <option value="Python">Python</option>
+          <option value="JavaScript">JavaScript</option>
+          <option value="Graphic Design">Graphic Design</option>
           <option value="SQL">SQL</option>
           <option value="React">React</option>
-          <option value="Python">Python</option>
         </select>
       </div>
 

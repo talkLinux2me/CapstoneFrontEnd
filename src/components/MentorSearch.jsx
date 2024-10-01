@@ -112,11 +112,14 @@ const MentorSearch = () => {
         >
           <option value="">Filter by expertise</option>
           <option value="Web Development">Web Development</option>
-          <option value="Data Science">Data Science</option>
+          <option value="AI">Artificial Intelligence</option>
           <option value="Java">Java</option>
           <option value="Python">Python</option>
           <option value="JavaScript">JavaScript</option>
           <option value="Graphic Design">Graphic Design</option>
+          <option value="SQL">SQL</option>
+          <option value="React">React</option>
+
         </select>
       </div>
 

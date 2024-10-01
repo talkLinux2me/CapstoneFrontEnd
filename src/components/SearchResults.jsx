@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 function SearchResults() {
   const [result, setResult] = useState([]);
+  const [message, setMessage] = useState('');
+  const [fadeOut, setFadeOut] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const results = location.state || [];
@@ -11,6 +13,21 @@ function SearchResults() {
     console.log(results);
     setResult(results);
   }, [results]);
+
+  const handleRequestConnect = (user) => {
+    const role = user.role === "mentor" ? "mentee" : "mentor";
+    setMessage(`A request to connect has been emailed to your ${role} match: ${user.name}.`);
+    setFadeOut(false);
+
+    // Start fade-out effect after displaying the message
+    setTimeout(() => {
+      setFadeOut(true);
+      // Clear the message after the fade-out is complete
+      setTimeout(() => {
+        setMessage('');
+      }, 300); // Adjust this time to match the duration of the fade-out
+    }, 5000); // Duration to show the message before starting fade-out
+  };
 
   return (
     <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
@@ -25,6 +42,15 @@ function SearchResults() {
         Back
       </button>
 
+      {/* Message Display */}
+      {message && (
+        <p
+          className={`text-white mb-4 transition-opacity duration-300 ease-in-out ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
+        >
+          {message}
+        </p>
+      )}
+
       {result.length === 0 ? (
         <p className="text-white">No results found.</p>
       ) : (
@@ -38,6 +64,15 @@ function SearchResults() {
               <p><strong>Expertise:</strong> {user.expertise.join(', ')}</p>
               <p><strong>Availability:</strong> {user.availability.join(', ')}</p>
               <p><strong>Meeting Type:</strong> {user.meetingType}</p>
+
+              {/* Request to Connect Button */}
+              <button
+                onClick={() => handleRequestConnect(user)}
+                className="mt-4 bg-[#4f759b] text-white rounded px-4 py-2 hover:bg-[#3f6390] transition duration-200 ease-in-out"
+                aria-label="Request to connect"
+              >
+                Request to Connect
+              </button>
             </div>
           ))}
         </div>
