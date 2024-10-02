@@ -44,6 +44,7 @@ const AppRoutes = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />  
         <Route path="/footer" element={<Footer/>} /> 
         <Route path="/user/:id" element={<UserProfile/>}/>
+        <Route path="/randomMentor" element={<MatchingComponent/>}/>
       </Routes>
     
     </>

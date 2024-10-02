@@ -13,7 +13,7 @@ const EditMentorProfile = () => {
     useEffect(() => {
         const fetchMentorData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8081/api/mentor/:id`);
+                const response = await axios.get(`http://localhost:8081/user/mentor/:id`);
                 setMentorData(response.data);
             } catch (err) {
                 setError(err.message);
@@ -32,7 +32,7 @@ const EditMentorProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:8081/api/mentor/:id}`, mentorData);
+            await axios.put(`http://localhost:8081/user/mentor/:id}`, mentorData);
             navigate(`/mentor/:id`);
         } catch (err) {
             setError(err.message);

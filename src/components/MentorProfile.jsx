@@ -15,7 +15,7 @@ const MentorProfile = ({ registeredUsers = [] }) => {
   useEffect(() => {
     const fetchMentorData = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/api/mentors/${id}`);
+        const response = await fetch(`http://localhost:8081/api/mentors/:id}`);
         if (!response.ok) throw new Error('Mentor profile not found');
         const data = await response.json();
         setMentorData(data);
@@ -67,7 +67,7 @@ const MentorProfile = ({ registeredUsers = [] }) => {
       <p><strong>Email:</strong> {mentorData.email}</p>
       <p><strong>Location:</strong> {mentorData.location}</p>
       <p><strong>Years of Experience:</strong> {mentorData.yearsOfExperience}</p>
-      <p><strong>Rating:</strong> ⭐ {mentorData.rating} / 5</p>
+     
 
       <h2 className="text-2xl font-semibold mt-4">Expertise</h2>
       <ul className="list-disc pl-5">
@@ -121,7 +121,7 @@ const MentorProfile = ({ registeredUsers = [] }) => {
         </button>
         <button 
           className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
-          onClick={() => navigate(`/mentors/${id}/edit`)} // Navigate to edit page
+          onClick={() => navigate(`//editmentorprofile`)}
         >
           Edit Profile
         </button>

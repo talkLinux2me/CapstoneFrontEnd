@@ -19,11 +19,11 @@ const CreateMentorProfile = () => {
     location: '',
     yearsOfExperience: '',
     availability: '',
-    expertise: [],
-    skills: [],
     certifications: [],
     interests: [],
+    meetingType: '',
     personalStatement: '',
+    codingLanguage: [],
     profilePic: null,
   });
   const [error, setError] = useState('');
@@ -83,6 +83,7 @@ const CreateMentorProfile = () => {
     const payload = {
       ...mentorData,
       interests: mentorData.interests, // Keep as array
+      codingLanguage: mentorData.codingLanguage,
       skills: mentorData.skills, 
       certifications: mentorData.certifications,// Keep as array
   };
@@ -130,6 +131,19 @@ const CreateMentorProfile = () => {
           />
         </div>
         <div className="mb-4">
+          <label htmlFor="yearsOfExperience" className="block text-gray-700">Years of Experience</label>
+          <input
+            type="number"
+            id="yearsOfExperience"
+            name="yearsOfExperience"
+            value={mentorData.yearsOfExperience}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+
+        <div className="mb-4">
           <label htmlFor="location" className="block text-gray-700">Location</label>
           <select
             id="location"
@@ -146,18 +160,6 @@ const CreateMentorProfile = () => {
           </select>
         </div>
         <div className="mb-4">
-          <label htmlFor="yearsOfExperience" className="block text-gray-700">Years of Experience</label>
-          <input
-            type="number"
-            id="yearsOfExperience"
-            name="yearsOfExperience"
-            value={mentorData.yearsOfExperience}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
           <label htmlFor="availability" className="block text-gray-700">Availability</label>
           <select
             id="availability"
@@ -168,18 +170,49 @@ const CreateMentorProfile = () => {
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           >
             <option value="">Select availability</option>
+            
             <option value="full-time">Full-Time</option>
             <option value="part-time">Part-Time</option>
             <option value="on-demand">On-Demand</option>
           </select>
         </div>
+
+        <div className="mb-4">
+          <label htmlFor="meetingType" className="block text-gray-700">Meeting Type</label>
+          <select
+            id="meetingType"
+            name="meetingType"
+            value={mentorData.meetingType}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            required
+          >
+            <option value="">Select meeting type</option>
+            <option value="virtual">Virtual</option>
+            <option value="in-person">In-Person</option>
+          </select>
+        </div>
+        
         <div className="mb-4">
           <label htmlFor="interests" className="block text-gray-700">Interests (comma-separated)</label>
           <input
             type="text"
             id="interests"
             name="interests"
-            value={mentorData.interests.join(', ')}
+            value={mentorData.interests ? mentorData.interests.join(', ') : ''}
+            onChange={handleArrayChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+
+
+        <div className="mb-4">
+          <label htmlFor="coding-language" className="block text-gray-700">Coding Languages (comma-separated)</label>
+          <input
+            type="text"
+            id="coding-languages"
+            name="coding-languages"
+            value={mentorData.codingLanguages ? mentorData.codingLanguages.join(', ') : ''}
             onChange={handleArrayChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />
@@ -190,33 +223,14 @@ const CreateMentorProfile = () => {
             type="text"
             id="certifications"
             name="certifications"
-            value={mentorData.certifications.join(', ')}
+            value={mentorData.certifications ? mentorData.certifications.join(', '):''}
             onChange={handleArrayChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        <div className="mb-4">
-          <label htmlFor="expertise" className="block text-gray-700">Expertise (comma-separated)</label>
-          <input
-            type="text"
-            id="expertise"
-            name="expertise"
-            value={mentorData.expertise.join(', ')}
-            onChange={handleArrayChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="skills" className="block text-gray-700">Skills (comma-separated)</label>
-          <input
-            type="text"
-            id="skills"
-            name="skills"
-            value={mentorData.skills ? mentorData.skills.join(', ') : ''}
-            onChange={handleArrayChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
+
+
+       
         <div className="mb-4">
           <label htmlFor="personalStatement" className="block text-gray-700">Personal Statement</label>
           <textarea
@@ -225,7 +239,7 @@ const CreateMentorProfile = () => {
             value={mentorData.personalStatement}
             onChange={handleChange}
             required
-             placeholder="Write your personal statement here in your preferred coding language ..."
+             placeholder="Write your personal statement here. Formatted in your preferred coding language in encouraged ..."
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
             rows="4"
           />

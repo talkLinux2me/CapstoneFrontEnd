@@ -59,6 +59,7 @@ const Navbar = () => {
           </NavLink>
 
           {loggedIn ? (
+            <>  
             <NavLink
               to="/"
               onClick={handleLogout}
@@ -68,6 +69,18 @@ const Navbar = () => {
             >
               Log Out
             </NavLink>
+            <NavLink
+              to="/randomMentor"
+
+              className={({ isActive }) => 
+                `text-white hover:bg-purple-700 hover:text-white px-3 py-2 rounded transition duration-300 ${isActive ? 'bg-purple-700' : ''}`
+              }
+            >
+            Random Matches
+            </NavLink>
+            </>
+
+            
           ) : (
             <>
               <NavLink

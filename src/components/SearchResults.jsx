@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate , useParams} from 'react-router-dom';
-
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function SearchResults() {
-  const [result, setResult] = useState([]);
+  const [results, setResults] = useState([]);
   const [message, setMessage] = useState('');
   const [fadeOut, setFadeOut] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const results = location.state || [];
 
-  
-
+  // Use the results from the state or an empty array if none
   useEffect(() => {
-    console.log(results);
-    setResult(results);
-  }, [results]);
+    const fetchedResults = location.state?.filteredMentors || [];
+    setResults(fetchedResults);
+  }, [location.state]);
 
   const handleRequestConnect = (user) => {
     const role = user.role === "mentor" ? "mentee" : "mentor";
@@ -54,12 +51,16 @@ function SearchResults() {
         </p>
       )}
 
-      {result.length === 0 ? (
+      {results.length === 0 ? (
         <p className="text-white">No results found.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full md:w-2/3">
-          {result.map((user) => (
-            <div key={user.id} className="bg-white shadow-md rounded-lg p-4 m-2 transition transform hover:scale-105" onClick={() => navigate(`/user/${user.id}`)}>
+          {results.map((user) => (
+            <div
+              key={user.id}
+              className="bg-white shadow-md rounded-lg p-4 m-2 transition transform hover:scale-105"
+              onClick={() => navigate(`/user/${user.id}`)}
+            >
               <h3 className="text-xl font-bold text-[#4f759b]">{user.name}</h3>
               <p><strong>Email:</strong> {user.email}</p>
               <p><strong>Role:</strong> {user.role}</p>
@@ -70,7 +71,10 @@ function SearchResults() {
 
               {/* Request to Connect Button */}
               <button
-                onClick={() => handleRequestConnect(user)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent triggering the onClick for the card
+                  handleRequestConnect(user);
+                }}
                 className="mt-4 bg-[#4f759b] text-white rounded px-4 py-2 hover:bg-[#3f6390] transition duration-200 ease-in-out"
                 aria-label="Request to connect"
               >

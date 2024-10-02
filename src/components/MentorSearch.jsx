@@ -40,25 +40,23 @@ const MentorSearch = () => {
     fetchMentors();
   }, []);
 
-  const applyFilters = () => {
+const applyFilters = () => {
     const filtered = mentors.filter((mentor) => {
-      const matchesSearchTerm = mentor.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesExpertise = expertiseFilter ? mentor.expertise.includes(expertiseFilter) : true;
-      const matchesExperience = experienceFilter ? mentor.yearsOfExperience >= Number(experienceFilter) : true;
-      const matchesAvailability = availabilityFilter ? mentor.availability.includes(availabilityFilter) : true;
-      const matchesMeetingType =
-        (meetingType.virtual && mentor.meetingType === 'virtual') ||
-        (meetingType.inPerson && mentor.meetingType === 'in-person') ||
-        (!meetingType.virtual && !meetingType.inPerson);
+        const matchesSearchTerm = mentor.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesExpertise = expertiseFilter ? mentor.expertise.includes(expertiseFilter) : true;
+        const matchesExperience = experienceFilter ? mentor.yearsOfExperience >= Number(experienceFilter) : true;
+        const matchesAvailability = availabilityFilter ? mentor.availability.includes(availabilityFilter) : true;
+        const matchesMeetingType =
+            (meetingType.virtual && mentor.meetingType === 'virtual') ||
+            (meetingType.inPerson && mentor.meetingType === 'in-person') ||
+            (!meetingType.virtual && !meetingType.inPerson);
 
-      return matchesSearchTerm && matchesExpertise && matchesExperience && matchesAvailability && matchesMeetingType;
+        return matchesSearchTerm && matchesExpertise && matchesExperience && matchesAvailability && matchesMeetingType;
     });
-    setFilteredMentors(filtered);
-    console.log(filtered)
-    console.log({state:filtered})
-    navigate('/searchResults', { state: filtered });
-    
-  };
+
+    navigate('/searchResults', { state: { filteredMentors: filtered } });
+};
+
 
   const handleReset = () => {
     setSearchTerm('');
@@ -69,10 +67,6 @@ const MentorSearch = () => {
     setFilteredMentors(mentors); // Reset to original list
     setHasSearched(false); // Allow all mentors to be shown again
   };
-
-  // useEffect(() => {
-
-  // }, [searchTerm, expertiseFilter, experienceFilter, availabilityFilter, meetingType]);
 
   return (
     <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
@@ -130,17 +124,17 @@ const MentorSearch = () => {
     onChange={(e) => setExperienceFilter(e.target.value)}
     className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
   >
-    <option value="">Filter by Years of Experience</option>
-    <option value="0">0+</option>
-    <option value="1">1+</option>
-    <option value="2">2+</option>
-    <option value="3">3+</option>
-    <option value="4">4+</option>
-    <option value="5">5+</option>
-    <option value="6">6+</option>
-    <option value="7">7+</option>
-    <option value="8">8+</option>
-    <option value="9">9+</option>
+    <option value="">Filter by years of experience</option>
+
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
     <option value="10">10+</option>
   </select>
 </div>
@@ -153,9 +147,14 @@ const MentorSearch = () => {
           onChange={(e) => setAvailabilityFilter(e.target.value)}
           className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
-          <option value="">Filter by availability</option>
-          <option value="Weekdays">Weekdays</option>
-          <option value="Weekends">Weekends</option>
+       <option value="">Filter by availability</option>{" "}
+          <option value="Monday">Monday</option>
+          <option value="Tuesday">Tuesday</option>
+          <option value="Wednesday">Wednesday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
+          <option value="Saturday">Saturday</option>
+          <option value="Sunday">Sunday</option>
         </select>
       </div>
 
@@ -190,26 +189,9 @@ const MentorSearch = () => {
       >
         Apply Filters
       </button>
-
-      {loading ? (
-        <p className="text-white">Loading...</p>
-      ) : (
-        <ul className="list-disc pl-5 mt-6 w-full md:w-1/2">
-          {hasSearched && filteredMentors.length === 0 ? (
-            <li className="text-white">No mentors found.</li>
-          ) : (
-            filteredMentors.map((mentor) => (
-              <li key={mentor.id} className="mb-2">
-                <a href={`/mentor/${mentor.id}`} className="text-[#4f759b] hover:underline">
-                  {mentor.name} - {mentor.expertise.join(', ')} ({mentor.yearsOfExperience} years)
-                </a>
-              </li>
-            ))
-          )}
-        </ul>
-      )}
-    </div>
-  );
+      </div> 
+  )
+    
 };
 
 export default MentorSearch;
