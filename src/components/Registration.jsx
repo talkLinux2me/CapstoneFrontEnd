@@ -49,17 +49,16 @@ const Registration = () => {
       });
 
       setSuccess('Registration successful! Redirecting to profile...');
-      console.log( await response.data.id)
-      localStorage.setItem("userID", await response.data.id);
+      localStorage.setItem("userID", response.data.id); // Store user ID
+      localStorage.setItem("userRole", formData.role); // Store user role
+
       setTimeout(() => {
         if (formData.role === 'mentee') {
           navigate('/creatementeeprofile');
-          window.location.reload()
         } else {
           navigate('/creatementorprofile');
-          window.location.reload()
-
         }
+        window.location.reload(); // Optional, but might not be necessary
       }, 2000);
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');

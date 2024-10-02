@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const states = [
@@ -11,18 +11,46 @@ const states = [
   "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
 ];
 
+const codingLanguageOptions = [
+  "JavaScript", "Python", "Java", "React", "SQL",
+  "TypeScript", "C++", "Ruby", "Swift", "Go"
+];
+
+const availabilityOptions = [
+  { value: 'full-time', label: 'Full-Time' },
+  { value: 'part-time', label: 'Part-Time' },
+  { value: 'on-demand', label: 'On-Demand' },
+];
+
+const certificationsOptions = [
+  "AWS Certified Solutions Architect",
+  "Certified ScrumMaster (CSM)",
+  "Cisco Certified Network Associate (CCNA)",
+  "CompTIA A+",
+  "CompTIA Security+",
+  "Google Certified Professional Cloud Architect",
+  "Microsoft Certified: Azure Fundamentals",
+  "Certified Information Systems Security Professional (CISSP)",
+  "AWS Certified Developer",
+  "PMP (Project Management Professional)",
+  "Red Hat Certified Engineer (RHCE)",
+  "Certified Ethical Hacker (CEH)",
+  "Salesforce Certified Administrator",
+  "Google Analytics Individual Qualification",
+  "ITIL Foundation"
+];
+
 const CreateMenteeProfile = () => {
   const navigate = useNavigate();
   const [menteeData, setMenteeData] = useState({
     location: '',
-    interests: [],
-    codingLanguages: [],
-    skills: [],
     personalStatement: '',
     availability: [],
     meetingType: '',
     yearsOfExperience: '',
-    expertise: [],
+    CodingLanguageGoal: '', 
+    certification: '',            
+    profilePic: null,
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -30,7 +58,6 @@ const CreateMenteeProfile = () => {
   let menteeID = localStorage.getItem("userID");
 
   useEffect(() => {
-    let menteeID = localStorage.getItem("userID");
     const fetchMenteeData = async () => {
       try {
         const response = await fetch(`http://localhost:8081/user/${menteeID}`);
@@ -60,18 +87,30 @@ const CreateMenteeProfile = () => {
     });
   };
 
-  const handleArrayChange = (e) => {
-    const { name, value } = e.target;
-    setMenteeData((prevData) => ({
-      ...prevData,
-      [name]: value.split(',').map((item) => item.trim()),
-    }));
+  const handleAvailabilityChange = (e) => {
+    const { value, checked } = e.target;
+    setMenteeData((prevData) => {
+      if (checked) {
+        return { ...prevData, availability: [...prevData.availability, value] };
+      } else {
+        return { ...prevData, availability: prevData.availability.filter((item) => item !== value) };
+      }
+    });
+  };
+
+  const handleFileChange = (e) => {
+    setMenteeData({
+      ...menteeData,
+      profilePic: e.target.files[0],
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const payload = {
       ...menteeData,
+      interests: menteeData.interests,
     };
 
     try {
@@ -91,12 +130,20 @@ const CreateMenteeProfile = () => {
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
+  }
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">Mentee Profile</h1>
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
-      <div className="mb-4">
-          <label htmlFor="profilePic" className="block text-gray-700">Profile Picture (optional) </label>
+        <div className="mb-4">
+          <label htmlFor="profilePic" className="block text-gray-700">Profile Picture (optional)</label>
           <input
             type="file"
             id="profilePic"
@@ -104,8 +151,9 @@ const CreateMenteeProfile = () => {
             onChange={handleFileChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />
-          </div>
-          <div className="mb-4">
+        </div>
+
+        <div className="mb-4">
           <label htmlFor="yearsOfExperience" className="block text-gray-700">Years of Experience</label>
           <input
             type="number"
@@ -117,6 +165,7 @@ const CreateMenteeProfile = () => {
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />
         </div>
+
         <div className="mb-4">
           <label htmlFor="location" className="block text-gray-700">Location</label>
           <select
@@ -125,7 +174,8 @@ const CreateMenteeProfile = () => {
             value={menteeData.location}
             onChange={handleChange}
             required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-3
+            00 rounded"
           >
             <option value="">Select a state</option>
             {states.map((state) => (
@@ -133,74 +183,57 @@ const CreateMenteeProfile = () => {
             ))}
           </select>
         </div>
+
         <div className="mb-4">
-          <label htmlFor="availability" className="block text-gray-700">Availability</label>
+          <label className="block text-gray-700">Availability</label>
+          <div className="mt-1 flex flex-wrap">
+            {availabilityOptions.map((option) => (
+              <label key={option.value} className="flex items-center mr-6 mb-2">
+                <input
+                  type="checkbox"
+                  value={option.value}
+                  checked={menteeData.availability.includes(option.value)}
+                  onChange={handleAvailabilityChange}
+                  className="mr-2 leading-tight"
+                />
+                <span className="text-gray-700">{option.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="certification" className="block text-gray-700">Certification You're Most Proud Of</label>
           <select
-            id="availability"
-            name="availability"
-            value={mentorData.availability}
+            id="certification"
+            name="certification"
+            value={menteeData.certification}
             onChange={handleChange}
-            required
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           >
-            <option value="">Select availability</option>
-            <option value="full-time">Full-Time</option>
-            <option value="part-time">Part-Time</option>
-            <option value="on-demand">On-Demand</option>
+            <option value="">Select a certification</option>
+            {certificationsOptions.map((cert) => (
+              <option key={cert} value={cert}>{cert}</option>
+            ))}
           </select>
         </div>
-        
+
         <div className="mb-4">
-          <label htmlFor="meetingType" className="block text-gray-700">Meeting Type</label>
+          <label htmlFor="CodingLanguageGoal" className="block text-gray-700">Coding Language Goal</label>
           <select
-            id="meetingType"
-            name="meetingType"
-            value={menteeData.meetingType}
+            id="CodingLanguageGoal"
+            name="CodingLanguageGoal"
+            value={menteeData.CodingLanguageGoal}
             onChange={handleChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
-            required
           >
-            <option value="">Select meeting type</option>
-            <option value="virtual">Virtual</option>
-            <option value="in-person">In-Person</option>
+            <option value="">Select a coding language</option>
+            {codingLanguageOptions.map((lang) => (
+              <option key={lang} value={lang}>{lang}</option>
+            ))}
           </select>
         </div>
-    
-        <div className="mb-4">
-          <label htmlFor="interests" className="block text-gray-700">Interests (comma-separated)</label>
-          <input
-            type="text"
-            id="interests"
-            name="interests"
-            value={menteeData.interests ? menteeData.interests.join(', ') : ''}
-            onChange={handleArrayChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="codingLanguages" className="block text-gray-700">Coding Languages (comma-separated)</label>
-          <input
-            type="text"
-            id="codingLanguages"
-            name="codingLanguages"
-            value={menteeData.codingLanguages ? menteeData.codingLanguages.join(', ') : ''}
-            onChange={handleArrayChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="skills" className="block text-gray-700">Existing Tech Skills (comma-separated)</label>
-          <input
-            type="text"
-            id="skills"
-            name="skills"
-            value={menteeData.skills ? menteeData.skills.join(', ') : ''}
-            onChange={handleArrayChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-       
-      
+
         <div className="mb-4">
           <label htmlFor="personalStatement" className="block text-gray-700">Personal Statement</label>
           <textarea
@@ -209,25 +242,15 @@ const CreateMenteeProfile = () => {
             value={menteeData.personalStatement}
             onChange={handleChange}
             required
-            placeholder="Write your personal statement here..."
+            placeholder="Please provide a personal statement here. Feel free to share any additional information you'd like potential mentors to know."
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        <button
-          type="submit"
-          className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700"
-        >
-          {isEditing ? "Update Profile" : "Create Profile"}
+
+        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+          {isEditing ? 'Update Profile' : 'Create Profile'}
         </button>
       </form>
-      <div className="mt-6">
-        <button 
-          className="bg-gray-500 text-white px-4 py-2 rounded"
-          onClick={() => navigate(-1)}
-        >
-          Back
-        </button>
-      </div>
     </div>
   );
 };

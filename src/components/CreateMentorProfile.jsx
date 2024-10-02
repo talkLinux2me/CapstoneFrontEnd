@@ -12,24 +12,51 @@ const states = [
   "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
 ];
 
+const codingLanguagesOptions = [
+  "JavaScript", "Python", "Java", "React", "SQL",
+  "TypeScript", "C++", "Ruby", "Swift", "Go"
+];
+
+const availabilityOptions = [
+  { value: 'full-time', label: 'Full-Time' },
+  { value: 'part-time', label: 'Part-Time' },
+  { value: 'on-demand', label: 'On-Demand' },
+];
+
+const certificationsOptions = [
+  "AWS Certified Solutions Architect",
+  "Certified ScrumMaster (CSM)",
+  "Cisco Certified Network Associate (CCNA)",
+  "CompTIA A+",
+  "CompTIA Security+",
+  "Google Certified Professional Cloud Architect",
+  "Microsoft Certified: Azure Fundamentals",
+  "Certified Information Systems Security Professional (CISSP)",
+  "AWS Certified Developer",
+  "PMP (Project Management Professional)",
+  "Red Hat Certified Engineer (RHCE)",
+  "Certified Ethical Hacker (CEH)",
+  "Salesforce Certified Administrator",
+  "Google Analytics Individual Qualification",
+  "ITIL Foundation"
+];
+
 const CreateMentorProfile = () => {
   const navigate = useNavigate();
   const [mentorData, setMentorData] = useState({
-  
     location: '',
     yearsOfExperience: '',
-    availability: '',
-    certifications: [],
+    availability: [],
+    certification: '',
     interests: [],
-    meetingType: '',
     personalStatement: '',
-    codingLanguage: [],
+    favoriteCodingLanguage: '',  // Updated to single value
     profilePic: null,
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  let mentorID = localStorage.getItem("userID");
+  const mentorID = localStorage.getItem("userID");
 
   useEffect(() => {
     const fetchMentorData = async () => {
@@ -39,7 +66,6 @@ const CreateMentorProfile = () => {
         const data = await response.json();
         setMentorData(data);
         setIsEditing(true);
-        console.log(mentorData)
       } catch (err) {
         setError(err.message);
       } finally {
@@ -62,18 +88,21 @@ const CreateMentorProfile = () => {
     });
   };
 
-  const handleArrayChange = (e) => {
-    const { name, value } = e.target;
-    setMentorData((prevData) => ({
-      ...prevData,
-      [name]: value.split(',').map((item) => item.trim()),
-    }));
-  };
-
   const handleFileChange = (e) => {
     setMentorData({
       ...mentorData,
-      profilePic:  e.target.files[0],
+      profilePic: e.target.files[0],
+    });
+  };
+
+  const handleAvailabilityChange = (e) => {
+    const { value, checked } = e.target;
+    setMentorData((prevData) => {
+      if (checked) {
+        return { ...prevData, availability: [...prevData.availability, value] };
+      } else {
+        return { ...prevData, availability: prevData.availability.filter((item) => item !== value) };
+      }
     });
   };
 
@@ -82,29 +111,26 @@ const CreateMentorProfile = () => {
 
     const payload = {
       ...mentorData,
-      interests: mentorData.interests, // Keep as array
-      codingLanguage: mentorData.codingLanguage,
-      skills: mentorData.skills, 
-      certifications: mentorData.certifications,// Keep as array
-  };
- 
-  console.log(payload, "payload data"); // Log the payload to check its structure
- 
-  try {
-    const response = await axios.put(`http://localhost:8081/user/edit/${mentorID}`, payload, {
-        headers: {
-            'Content-Type': 'application/json' // Set content type to application/json
-        }
-    });
+      interests: mentorData.interests,
+    };
 
-    if (response.status !== 200) throw new Error('Profile update failed');
-    
-    const data = response.data; // Get the updated data
-    setMentorData(data);
-} catch (err) {
-    setError(err.message);
-}
-};
+    try {
+      const response = await axios.put(`http://localhost:8081/user/edit/${mentorID}`, payload, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.status !== 200) throw new Error('Profile update failed');
+
+      const data = response.data;
+      setMentorData(data);
+      navigate('/matches');
+
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   if (loading) {
     return <Spinner />;
@@ -116,12 +142,10 @@ const CreateMentorProfile = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4"> Mentor Profile</h1>
+      <h1 className="text-3xl font-bold mb-4">Mentor Profile</h1>
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
-        
-    
         <div className="mb-4">
-          <label htmlFor="profilePic" className="block text-gray-700">Profile Picture (optional) </label>
+          <label htmlFor="profilePic" className="block text-gray-700">Profile Picture (optional)</label>
           <input
             type="file"
             id="profilePic"
@@ -142,7 +166,6 @@ const CreateMentorProfile = () => {
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           />
         </div>
-
         <div className="mb-4">
           <label htmlFor="location" className="block text-gray-700">Location</label>
           <select
@@ -159,78 +182,57 @@ const CreateMentorProfile = () => {
             ))}
           </select>
         </div>
+
         <div className="mb-4">
-          <label htmlFor="availability" className="block text-gray-700">Availability</label>
+          <label className="block text-gray-700">Availability</label>
+          <div className="mt-1 flex flex-wrap">
+            {availabilityOptions.map((option) => (
+              <label key={option.value} className="flex items-center mr-6 mb-2">
+                <input
+                  type="checkbox"
+                  value={option.value}
+                  checked={mentorData.availability.includes(option.value)}
+                  onChange={handleAvailabilityChange}
+                  className="mr-2 leading-tight"
+                />
+                <span className="text-gray-700">{option.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="certification" className="block text-gray-700">Certification You're Most Proud Of</label>
           <select
-            id="availability"
-            name="availability"
-            value={mentorData.availability}
+            id="certification"
+            name="certification"
+            value={mentorData.certification}
             onChange={handleChange}
-            required
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
           >
-            <option value="">Select availability</option>
-            
-            <option value="full-time">Full-Time</option>
-            <option value="part-time">Part-Time</option>
-            <option value="on-demand">On-Demand</option>
+            <option value="">Select a certification</option>
+            {certificationsOptions.map((cert) => (
+              <option key={cert} value={cert}>{cert}</option>
+            ))}
           </select>
         </div>
 
         <div className="mb-4">
-          <label htmlFor="meetingType" className="block text-gray-700">Meeting Type</label>
+          <label htmlFor="favoriteCodingLanguage" className="block text-gray-700">Your Favorite Coding Language to Share Knowledge On</label>
           <select
-            id="meetingType"
-            name="meetingType"
-            value={mentorData.meetingType}
+            id="favoriteCodingLanguage"
+            name="favoriteCodingLanguage"
+            value={mentorData.favoriteCodingLanguage}
             onChange={handleChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
-            required
           >
-            <option value="">Select meeting type</option>
-            <option value="virtual">Virtual</option>
-            <option value="in-person">In-Person</option>
+            <option value="">Select a coding language</option>
+            {codingLanguagesOptions.map((lang) => (
+              <option key={lang} value={lang}>{lang}</option>
+            ))}
           </select>
         </div>
-        
-        <div className="mb-4">
-          <label htmlFor="interests" className="block text-gray-700">Interests (comma-separated)</label>
-          <input
-            type="text"
-            id="interests"
-            name="interests"
-            value={mentorData.interests ? mentorData.interests.join(', ') : ''}
-            onChange={handleArrayChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
 
-
-        <div className="mb-4">
-          <label htmlFor="coding-language" className="block text-gray-700">Coding Languages (comma-separated)</label>
-          <input
-            type="text"
-            id="coding-languages"
-            name="coding-languages"
-            value={mentorData.codingLanguages ? mentorData.codingLanguages.join(', ') : ''}
-            onChange={handleArrayChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="certifications" className="block text-gray-700">Certifications (comma-separated)</label>
-          <input
-            type="text"
-            id="certifications"
-            name="certifications"
-            value={mentorData.certifications ? mentorData.certifications.join(', '):''}
-            onChange={handleArrayChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-
-
-       
         <div className="mb-4">
           <label htmlFor="personalStatement" className="block text-gray-700">Personal Statement</label>
           <textarea
@@ -239,7 +241,7 @@ const CreateMentorProfile = () => {
             value={mentorData.personalStatement}
             onChange={handleChange}
             required
-             placeholder="Write your personal statement here. Formatted in your preferred coding language in encouraged ..."
+            placeholder= "Please provide a personal statement here. Feel free to share any additional information you'd like potential mentees to know. We encourage you to format your statement in your favorite coding language!"
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
             rows="4"
           />
@@ -252,7 +254,7 @@ const CreateMentorProfile = () => {
         </button>
       </form>
       <div className="mt-6">
-        <button 
+        <button
           className="bg-gray-500 text-white px-4 py-2 rounded"
           onClick={() => navigate(-1)}
         >

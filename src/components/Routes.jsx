@@ -19,6 +19,7 @@ import SearchResults from './SearchResults';
 import ForgotPassword from './ForgotPassword';
 import Footer from './Footer';
 import UserProfile from './UserProfile';
+import MatchMakingComponent from './MatchMakingComponent';
 
 const AppRoutes = () => {
   return (
@@ -44,7 +45,8 @@ const AppRoutes = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />  
         <Route path="/footer" element={<Footer/>} /> 
         <Route path="/user/:id" element={<UserProfile/>}/>
-        <Route path="/randomMentor" element={<MatchingComponent/>}/>
+      
+        <Route path="/matchmakingcomponent" element={<MatchMakingComponent/>}/>
       </Routes>
     
     </>
