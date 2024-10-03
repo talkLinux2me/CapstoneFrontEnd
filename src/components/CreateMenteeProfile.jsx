@@ -107,6 +107,7 @@ const CreateMenteeProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    navigate('/matchmakingcomponent');
 
     const payload = {
       ...menteeData,

@@ -50,12 +50,13 @@ const CreateMentorProfile = () => {
     certification: '',
     interests: [],
     personalStatement: '',
-    favoriteCodingLanguage: '',  // Updated to single value
+    favoriteCodingLanguage: '',
     profilePic: null,
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const mentorID = localStorage.getItem("userID");
 
   useEffect(() => {
@@ -109,6 +110,13 @@ const CreateMentorProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate yearsOfExperience
+    if (mentorData.yearsOfExperience < 0) {
+      setError("Years of experience must be a positive number.");
+      return;
+    }
+
+    setSubmitting(true); // Start loading
     const payload = {
       ...mentorData,
       interests: mentorData.interests,
@@ -126,9 +134,10 @@ const CreateMentorProfile = () => {
       const data = response.data;
       setMentorData(data);
       navigate('/matches');
-
     } catch (err) {
       setError(err.message);
+    } finally {
+      setSubmitting(false); // Stop loading
     }
   };
 
@@ -241,16 +250,17 @@ const CreateMentorProfile = () => {
             value={mentorData.personalStatement}
             onChange={handleChange}
             required
-            placeholder= "Please provide a personal statement here. Feel free to share any additional information you'd like potential mentees to know. We encourage you to format your statement in your favorite coding language!"
+            placeholder="Please provide a personal statement here. Feel free to share any additional information you'd like potential mentees to know. We encourage you to format your statement in your favorite coding language!"
             className="mt-1 block w-full p-2 border border-gray-300 rounded"
             rows="4"
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700"
+          disabled={submitting} // Disable button while submitting
+          className={`w-full ${submitting ? 'bg-gray-400' : 'bg-green-600'} text-white font-semibold py-2 rounded hover:bg-green-700`}
         >
-          {isEditing ? "Update Profile" : "Create Profile"}
+          {submitting ? "Submitting..." : (isEditing ? "Update Profile" : "Create Profile")}
         </button>
       </form>
       <div className="mt-6">

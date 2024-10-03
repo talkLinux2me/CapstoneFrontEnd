@@ -7,7 +7,7 @@ const Registration = () => {
     name: '',
     email: '',
     password: '',
-    role: 'mentee',
+    role: 'mentee' || 'mentor',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -56,7 +56,7 @@ const Registration = () => {
         if (formData.role === 'mentee') {
           navigate('/creatementeeprofile');
         } else {
-          navigate('/creatementorprofile');
+          navigate('/creatementeeprofile');
         }
         window.location.reload(); // Optional, but might not be necessary
       }, 2000);
