@@ -25,9 +25,9 @@ const Login = () => {
         if (data.userID) {
           localStorage.setItem("userID", data.userID);
           if (data.role === 'mentor') {
-            navigate(`/mentees`);
+            navigate(`/mentor/:id`);
           } else if (data.role === 'mentee') {
-            navigate(`/mentors`);
+            navigate(`/mentee/:id`);
           }
         }
       } catch (err) {

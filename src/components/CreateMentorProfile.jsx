@@ -116,7 +116,6 @@ const CreateMentorProfile = () => {
       return;
     }
 
-    setSubmitting(true); // Start loading
     const payload = {
       ...mentorData,
       interests: mentorData.interests,
@@ -133,12 +132,11 @@ const CreateMentorProfile = () => {
 
       const data = response.data;
       setMentorData(data);
-      navigate('/matches');
+
+      navigate("/mentees");
     } catch (err) {
       setError(err.message);
-    } finally {
-      setSubmitting(false); // Stop loading
-    }
+    } 
   };
 
   if (loading) {
@@ -255,22 +253,19 @@ const CreateMentorProfile = () => {
             rows="4"
           />
         </div>
-        <button
-          type="submit"
-          disabled={submitting} // Disable button while submitting
-          className={`w-full ${submitting ? 'bg-gray-400' : 'bg-green-600'} text-white font-semibold py-2 rounded hover:bg-green-700`}
-        >
-          {submitting ? "Submitting..." : (isEditing ? "Update Profile" : "Create Profile")}
+        
+      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+          {isEditing ? 'Update Profile' : 'Create Profile'}
         </button>
       </form>
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <button
           className="bg-gray-500 text-white px-4 py-2 rounded"
           onClick={() => navigate(-1)}
         >
           Back
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

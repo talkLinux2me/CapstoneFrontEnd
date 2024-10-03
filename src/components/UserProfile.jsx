@@ -50,10 +50,10 @@ function UserProfile() {
                     <p><strong>Location:</strong> {userInfo.location}</p>
                     <p><strong>Years of Experience:</strong> {userInfo.yearsOfExperience}</p>
                     <p><strong>Availability:</strong> {availabilityList || 'N/A'}</p>
-                    <p><strong>Expertise:</strong> {expertiseList || 'N/A'}</p>
+                    
                     <p><strong>Skills:</strong> {skillsList || 'N/A'}</p>
                     <p><strong>Certifications:</strong> {userInfo.certifications}</p>
-                    <p><strong>Interests:</strong> {interestsList || 'N/A'}</p>
+                    
                     <p><strong>Personal Statement:</strong> {userInfo.personalStatement}</p>
                 </div>
             ) : (

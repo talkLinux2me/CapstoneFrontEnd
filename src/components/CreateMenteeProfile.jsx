@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Spinner from './Spinner';
 
 const states = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida",
@@ -107,7 +108,7 @@ const CreateMenteeProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate('/matchmakingcomponent');
+   
 
     const payload = {
       ...menteeData,
@@ -125,14 +126,16 @@ const CreateMenteeProfile = () => {
 
       const data = response.data;
       setMenteeData(data);
-      navigate("/randomMentor");
+      localStorage.setItem('successMessage', 'Profile Successfully Created! Now directing you to Mentor Search...');
+
+      navigate("/mentors");
     } catch (err) {
       setError(err.message);
     }
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   if (error) {
