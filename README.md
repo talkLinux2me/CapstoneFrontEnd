@@ -1,4 +1,4 @@
-# Tech Mentor Mentee Match
+# Tech Mentor Mentee Connect
 
 ## Overview
 Tech Mentor Mentee Match is a web application that connects experienced mentors with eager mentees. 
@@ -43,4 +43,4 @@ The platform allows users to create profiles, search for mentors or mentees, and
   Elan Oleja, thank you for checking in and helping get me through this strenous course. I am proud of all my cohort coworkers and how far we have come.
   Finally, thank you PeopleShores and Accenture for providing this opportunity. The future is much brighter because of RTT-111!
 
-  Thank you for checking out Tech Mentor Mentee Match! I hope you find it useful in connecting mentors and mentees in the ever growing field of Technology.
+  Thank you for checking out Tech Mentor Mentee Connect! I hope you find it useful in connecting mentors and mentees in the ever growing field of Technology.
