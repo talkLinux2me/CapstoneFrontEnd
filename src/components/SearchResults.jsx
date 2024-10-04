@@ -11,6 +11,7 @@ function SearchResults() {
   // Use the results from the state or an empty array if none
   useEffect(() => {
     const fetchedResults = location.state?.filteredMentors || [];
+    console.log(fetchedResults)
     setResults(fetchedResults);
   }, [location.state]);
 
@@ -30,7 +31,7 @@ function SearchResults() {
   };
 
   return (
-    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
+    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center bg-[#0e1c2d]">
       <h2 className="text-4xl font-bold mb-6 text-white">Search Results</h2>
 
       {/* Back Button */}
@@ -58,16 +59,17 @@ function SearchResults() {
           {results.map((user) => (
             <div
               key={user.id}
-              className="bg-white shadow-md rounded-lg p-4 m-2 transition transform hover:scale-105"
+              className="bg-white shadow-md rounded-lg p-4 m-2 transition transform hover:scale-105 cursor-pointer"
               onClick={() => navigate(`/user/${user.id}`)}
             >
               <h3 className="text-xl font-bold text-[#4f759b]">{user.name}</h3>
-              <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>Role:</strong> {user.role}</p>
-              <p><strong>Years of Experience:</strong> {user.yearsOfExperience}</p>
-              <p><strong>Expertise:</strong> {user.expertise.join(', ')}</p>
-              <p><strong>Availability:</strong> {user.availability.join(', ')}</p>
-              <p><strong>Meeting Type:</strong> {user.meetingType}</p>
+              <p className="text-gray-700"><strong>Email:</strong> {user.email}</p>
+              <p className="text-gray-700"><strong>Role:</strong> {user.role}</p>
+              <p className="text-gray-700"><strong>Years of Experience:</strong> {user.yearsOfExperience}</p>
+              <p className="text-gray-700"><strong>Location:</strong> {user.location}</p>
+              <p className="text-gray-700"><strong>Expertise:</strong> {user.expertise.join(', ')}</p>
+              <p className="text-gray-700"><strong>Availability:</strong> {user.availability.join(', ')}</p>
+              <p className="text-gray-700"><strong>Meeting Type:</strong> {user.meetingType}</p>
 
               {/* Request to Connect Button */}
               <button
@@ -78,7 +80,7 @@ function SearchResults() {
                 className="mt-4 bg-[#4f759b] text-white rounded px-4 py-2 hover:bg-[#3f6390] transition duration-200 ease-in-out"
                 aria-label="Request to connect"
               >
-                Request to Connect
+                git commit -m "Request to Connect"
               </button>
             </div>
           ))}

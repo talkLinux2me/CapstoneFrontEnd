@@ -46,6 +46,7 @@ const applyFilters = () => {
         const matchesExpertise = expertiseFilter ? mentor.expertise.includes(expertiseFilter) : true;
         const matchesExperience = experienceFilter ? mentor.yearsOfExperience >= Number(experienceFilter) : true;
         const matchesAvailability = availabilityFilter ? mentor.availability.includes(availabilityFilter) : true;
+        
         const matchesMeetingType =
             (meetingType.virtual && mentor.meetingType === 'virtual') ||
             (meetingType.inPerson && mentor.meetingType === 'in-person') ||
@@ -69,7 +70,7 @@ const applyFilters = () => {
   };
 
   return (
-    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
+    <div className="backdrop-blur-background p-6 min-h-screen bg-[#142a45] flex flex-col items-center">
       <h2 className="text-4xl font-bold mb-6 text-white">Find a Mentor</h2>
 
       {/* Search Bar Section */}
@@ -126,15 +127,15 @@ const applyFilters = () => {
   >
     <option value="">Filter by years of experience</option>
 
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-    <option value="9">9</option>
+    <option value="1">1+</option>
+    <option value="2">2+</option>
+    <option value="3">3+</option>
+    <option value="4">4+</option>
+    <option value="5">5+</option>
+    <option value="6">6+</option>
+    <option value="7">7+</option>
+    <option value="8">8+</option>
+    <option value="9">9+</option>
     <option value="10">10+</option>
   </select>
 </div>
@@ -147,7 +148,7 @@ const applyFilters = () => {
           onChange={(e) => setAvailabilityFilter(e.target.value)}
           className="border rounded w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
-       <option value="">Filter by availability</option>{" "}
+       <option value="">Preferred Meeting Day</option>{" "}
           <option value="Monday">Monday</option>
           <option value="Tuesday">Tuesday</option>
           <option value="Wednesday">Wednesday</option>

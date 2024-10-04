@@ -108,7 +108,6 @@ const CreateMenteeProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
 
     const payload = {
       ...menteeData,
@@ -143,9 +142,9 @@ const CreateMenteeProfile = () => {
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">Mentee Profile</h1>
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
+    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
+      <h1 className="text-4xl font-bold mb-6 text-white">Mentee Profile</h1>
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
         <div className="mb-4">
           <label htmlFor="profilePic" className="block text-gray-700">Profile Picture (optional)</label>
           <input
@@ -153,7 +152,7 @@ const CreateMenteeProfile = () => {
             id="profilePic"
             name="profilePic"
             onChange={handleFileChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           />
         </div>
 
@@ -166,7 +165,7 @@ const CreateMenteeProfile = () => {
             value={menteeData.yearsOfExperience}
             onChange={handleChange}
             required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           />
         </div>
 
@@ -178,8 +177,7 @@ const CreateMenteeProfile = () => {
             value={menteeData.location}
             onChange={handleChange}
             required
-            className="mt-1 block w-full p-2 border border-gray-3
-            00 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           >
             <option value="">Select a state</option>
             {states.map((state) => (
@@ -213,7 +211,7 @@ const CreateMenteeProfile = () => {
             name="certification"
             value={menteeData.certification}
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           >
             <option value="">Select a certification</option>
             {certificationsOptions.map((cert) => (
@@ -229,7 +227,7 @@ const CreateMenteeProfile = () => {
             name="CodingLanguageGoal"
             value={menteeData.CodingLanguageGoal}
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           >
             <option value="">Select a coding language</option>
             {codingLanguageOptions.map((lang) => (
@@ -247,11 +245,11 @@ const CreateMenteeProfile = () => {
             onChange={handleChange}
             required
             placeholder="Please provide a personal statement here. Feel free to share any additional information you'd like potential mentors to know."
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           />
         </div>
 
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+        <button type="submit" className="bg-[#4f759b] text-white py-2 px-4 rounded hover:bg-[#3f6390] transition duration-200 ease-in-out">
           {isEditing ? 'Update Profile' : 'Create Profile'}
         </button>
       </form>

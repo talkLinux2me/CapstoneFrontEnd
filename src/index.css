@@ -21,12 +21,38 @@
     display: inline-block;
     animation: dance 1s infinite;
   }
-  
-
-.backdrop-blur-background {
-    backdrop-filter: blur(10px);
-    background-color: rgb(159, 155, 167); /* Primary color with some transparency */
+  .logo {
+    width: 50%; 
+  /* Set your desired width */
+    height: auto; /* Maintain aspect ratio */
+    /* transform: rotate(-15deg); Tilt the logo */
+    position: relative; /* Allow for positioning */
+    /* top: 20x; Move it up so it appears out of the navbar */
+    left: -10px; /* Adjust horizontal position if needed */
+    transition: transform 0.3s; /* Add transition for hover effect */
   }
+  
+  .logo:hover {
+    transform: rotate(-10deg); /* Slightly adjust on hover for effect */
+  }
+  
+  
+/* 
+  .backdrop-blur-background {
+    background: linear-gradient(135deg, #4f759b, #571f4e, #3f6390, #6a1b9a);
+    background-size: 400% 400%;
+    animation: gradientAnimation 8s ease infinite;
+    height: 100vh; 
+  }
+  
+   @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 100% 50%; }
+    50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+    100% { background-position: 0% 50%; }
+  }  */
+  
   
   .checkbox-label {
       transition: color 0.3s ease;

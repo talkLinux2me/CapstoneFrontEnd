@@ -51,17 +51,18 @@ const Registration = () => {
       const response = await axios.post('http://localhost:8081/user/register', { 
         ...formData
       });
-
-      setSuccess('Registration successful! Redirecting to profile...');
+      console.log(response)
+      setSuccess('Registration successful! Redirecting to login page...');
       localStorage.setItem("userID", response.data.id); // Store user ID
       localStorage.setItem("userRole", formData.role); // Store user role
 
       setTimeout(() => {
-        if (formData.role === 'mentee') {
-          navigate('/creatementeeprofile');
-        } else {
-          navigate('/creatementeeprofile');
-        }
+        if (response.status === 201) {
+          navigate('/login');
+        } 
+        // else {
+        //   navigate('/creatementorprofile');
+        // }
         window.location.reload(); // Optional, but might not be necessary
       }, 2000);
     } catch (err) {
@@ -70,7 +71,7 @@ const Registration = () => {
   };
 
   return (
-    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
+    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col bg-[#142a45] items-center">
       <h1 className="text-4xl font-bold mb-6 text-white">Register</h1>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
         {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -128,7 +129,7 @@ const Registration = () => {
           type="submit"
           className="w-full bg-[#4f759b] text-white font-semibold py-2 rounded hover:bg-[#3f6390] focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
         >
-          Register
+          git init
         </button>
       </form>
     </div>

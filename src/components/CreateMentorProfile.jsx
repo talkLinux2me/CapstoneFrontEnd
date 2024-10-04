@@ -56,7 +56,6 @@ const CreateMentorProfile = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const mentorID = localStorage.getItem("userID");
 
   useEffect(() => {
@@ -148,9 +147,9 @@ const CreateMentorProfile = () => {
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">Mentor Profile</h1>
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
+    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
+      <h1 className="text-4xl font-bold mb-6 text-white">Mentor Profile</h1>
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
         <div className="mb-4">
           <label htmlFor="profilePic" className="block text-gray-700">Profile Picture (optional)</label>
           <input
@@ -158,9 +157,10 @@ const CreateMentorProfile = () => {
             id="profilePic"
             name="profilePic"
             onChange={handleFileChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           />
         </div>
+
         <div className="mb-4">
           <label htmlFor="yearsOfExperience" className="block text-gray-700">Years of Experience</label>
           <input
@@ -170,9 +170,10 @@ const CreateMentorProfile = () => {
             value={mentorData.yearsOfExperience}
             onChange={handleChange}
             required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           />
         </div>
+
         <div className="mb-4">
           <label htmlFor="location" className="block text-gray-700">Location</label>
           <select
@@ -181,7 +182,7 @@ const CreateMentorProfile = () => {
             value={mentorData.location}
             onChange={handleChange}
             required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           >
             <option value="">Select a state</option>
             {states.map((state) => (
@@ -215,7 +216,7 @@ const CreateMentorProfile = () => {
             name="certification"
             value={mentorData.certification}
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           >
             <option value="">Select a certification</option>
             {certificationsOptions.map((cert) => (
@@ -231,7 +232,7 @@ const CreateMentorProfile = () => {
             name="favoriteCodingLanguage"
             value={mentorData.favoriteCodingLanguage}
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
           >
             <option value="">Select a coding language</option>
             {codingLanguagesOptions.map((lang) => (
@@ -249,23 +250,15 @@ const CreateMentorProfile = () => {
             onChange={handleChange}
             required
             placeholder="Please provide a personal statement here. Feel free to share any additional information you'd like potential mentees to know. We encourage you to format your statement in your favorite coding language!"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4f759b]"
             rows="4"
           />
         </div>
         
-      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+        <button type="submit" className="bg-[#4f759b] text-white py-2 px-4 rounded hover:bg-[#3f6390] transition duration-200 ease-in-out">
           {isEditing ? 'Update Profile' : 'Create Profile'}
         </button>
       </form>
-      {/* <div className="mt-6">
-        <button
-          className="bg-gray-500 text-white px-4 py-2 rounded"
-          onClick={() => navigate(-1)}
-        >
-          Back
-        </button>
-      </div> */}
     </div>
   );
 };

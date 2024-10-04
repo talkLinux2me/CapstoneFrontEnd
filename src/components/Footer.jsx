@@ -3,7 +3,7 @@ import { FaTwitter, FaInstagram, FaTiktok, FaLinkedin } from 'react-icons/fa'; /
 
 const Footer = () => {
   return (
-    <footer className="bg-purple-700 text-white py-4">
+    <footer className="bg-purple-800 text-white py-4">
       <div className="container mx-auto text-center">
         <div className="flex justify-center space-x-4 mb-2">
           <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">

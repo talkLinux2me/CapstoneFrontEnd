@@ -7,12 +7,14 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(''); // Initialize success state
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (email === '' || password === '') {
       setError('Please fill in all fields.');
+      setSuccess(''); // Clear success message on error
     } else {
       setError('');
       try {
@@ -22,25 +24,29 @@ const Login = () => {
         });
         
         const data = await response.data;
+        setSuccess('Login successful! Redirecting to profile creation page...');
+
         if (data.userID) {
           localStorage.setItem("userID", data.userID);
           if (data.role === 'mentor') {
-            navigate(`/mentor/:id`);
+            navigate(`/creatementorprofile`);
           } else if (data.role === 'mentee') {
-            navigate(`/mentee/:id`);
+            navigate(`/creatementeeprofile`);
           }
         }
       } catch (err) {
         setError(err.message || 'Something went wrong.');
+        setSuccess(''); // Clear success message on error
       }
     }
   };
 
   return (
-    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
+    <div className="backdrop-blur-background p-6 min-h-screen bg-[#142a45] flex flex-col items-center">
       <h1 className="text-4xl font-bold mb-6 text-white">Login</h1>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
         {error && <p className="text-red-500 mb-4">{error}</p>}
+        {success && <p className="text-green-500 mb-4">{success}</p>} {/* Display success message */}
         
         <div className="mb-4">
           <label htmlFor="email" className="block text-gray-700">Email</label>

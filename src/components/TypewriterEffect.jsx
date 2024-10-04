@@ -40,7 +40,7 @@ const TypewriterEffect = () => {
   }, [messageIndex]);
 
   return (
-    <div className="text-center text-xl text-[#571f4e] font-semibold my-6">
+    <div className="text-center text-xl text-[WHITE] font-semibold my-20">
       {displayedText}
     </div>
   );

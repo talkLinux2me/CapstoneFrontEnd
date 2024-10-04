@@ -24,7 +24,7 @@ function MenteeSearch() {
     
     const fetchMentees = async () => {
       setLoading(true);
-      setError(null);
+      // setError(null);
       try {
         const response = await axios.get(
           "http://localhost:8081/user/getAllMentees"
@@ -77,12 +77,11 @@ function MenteeSearch() {
     );
     });
 
-    setFilteredMentees(filtered)
+
     console.log(filtered , "filtered");
-    console.log(filteredMentees, "filteredMentees")
-    setFilteredMentees(filtered);
+    setFilteredMentees(filtered)
     console.log(filteredMentees);
-    navigate('/searchResults', { state: filtered   });
+    navigate('/searchResults', { state: { filteredMentors: filtered }} );
   };
 
   const handleReset = () => {
@@ -96,7 +95,7 @@ function MenteeSearch() {
   };
 
   return (
-    <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
+    <div className="backdrop-blur-background p-6 min-h-screen bg-[#142a45] flex flex-col items-center">
       <h2 className="text-4xl font-bold mb-6 text-white">Search for Mentees</h2>
 
       <div className="flex flex-col md:flex-row mb-4 w-full md:justify-center">
