@@ -148,7 +148,7 @@ const CreateMentorProfile = () => {
 
   return (
     <div className="backdrop-blur-background p-6 min-h-screen flex flex-col items-center">
-      <h1 className="text-4xl font-bold mb-6 text-white">Mentor Profile</h1>
+      <h1 className="text-4xl font-bold mb-6 text-[#4d7eb9]">Mentor Profile</h1>
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
         <div className="mb-4">
           <label htmlFor="profilePic" className="block text-gray-700">Profile Picture (optional)</label>

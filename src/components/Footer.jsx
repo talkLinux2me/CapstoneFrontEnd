@@ -19,7 +19,7 @@ const Footer = () => {
             <FaTiktok size={24} />
           </a>
         </div>
-        <p className="mb-2">© 2024 Tech Mentor Mentee Match. All Rights Reserved.</p>
+        <p className="mb-2">© 2024 Tech Mentor Mentee Connect. All Rights Reserved.</p>
         <p className="text-sm">
           Developed by Jennifer Falco for PeopleShores, Accenture, and Per Scholas.
         </p>
